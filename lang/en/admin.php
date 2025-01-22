@@ -7,6 +7,10 @@ return[
     'products'=> 'Products',
     'all_products'=> 'All Products',
 
+
+    'sliders'=> 'Sliders',
+    'all_sliders'=> 'All Sliders',
+
     'role'=> 'Role',
     'all_role'=> 'All Role',
 

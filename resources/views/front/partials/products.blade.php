@@ -1,148 +1,132 @@
 <style>
-    .image-gallery {
+    /* البحث */
+    .search-container {
+        margin: 20px auto;
+        display: flex;
+        justify-content: flex-end;
+        /* الحفاظ على المحاذاة */
+        align-items: center;
+        gap: 10px;
+        padding-right: 20px;
+    }
+
+    .search-form {
         display: flex;
         align-items: center;
-        justify-content: center;
-        position: relative;
-    }
-
-    .main-image {
-        flex: 1;
-        text-align: center;
-    }
-
-    .main-image img {
-        width: 100%;
-        max-width: 500px;
-    }
-
-    .thumbnails {
-        display: flex;
-        flex-direction: column;
         gap: 10px;
-        position: absolute;
-        left: -110px;
-        top: 50%;
-        transform: translateY(-50%);
+        padding-left: 330px;
     }
 
-    .thumbnail img {
-        width: 100px;
-        height: auto;
-        cursor: pointer;
-    }
-
-    .custom-select-field {
-        appearance: none;
-        /* إزالة الشكل الافتراضي */
-        -webkit-appearance: none;
-        /* إزالة الشكل الافتراضي لمتصفحات WebKit */
-        -moz-appearance: none;
-        /* إزالة الشكل الافتراضي لمتصفحات Firefox */
-        background-color: #f5f5f5;
-        /* لون الخلفية */
-        border: 1px solid #ddd;
-        /* لون الحدود */
-        border-radius: 5px;
-        /* زوايا مستديرة */
+    .search-input {
+        width: 300px;
         padding: 10px 15px;
-        /* مسافة داخلية */
-        font-size: 14px;
-        /* حجم النص */
-        color: #333;
-        /* لون النص */
-        width: 100%;
-        /* ملء عرض الحاوية */
-        cursor: pointer;
-        /* تغيير المؤشر */
-        transition: border-color 0.3s, box-shadow 0.3s;
-        /* تأثيرات الانتقال */
-    }
-
-    .custom-select-field:focus {
-        border-color: #717fe0;
-        /* لون الحدود عند التركيز */
-        box-shadow: 0 0 5px rgba(113, 127, 224, 0.5);
-        /* تأثير الظل عند التركيز */
-        outline: none;
-        /* إزالة الحدود الخارجية الافتراضية */
-    }
-
-    .custom-select-field::after {
-        content: "▼";
-        /* سهم مخصص */
-        position: absolute;
-        right: 15px;
-        top: 50%;
-        transform: translateY(-50%);
-        pointer-events: none;
-        /* منع التفاعل مع السهم */
-        color: #717fe0;
-        /* لون السهم */
-    }
-
-    <style>.quantity-content {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-top: 15px;
-    }
-
-    .left-content h6 {
-        margin: 0;
+        border: 1px solid #ddd;
+        border-radius: 5px;
         font-size: 16px;
-        font-weight: 600;
+        transition: all 0.3s ease;
     }
 
-    .right-content {
-        display: flex;
-        align-items: center;
-        gap: 10px;
+    .search-input:focus {
+        border-color: #5a67d8;
+        box-shadow: 0 0 5px rgba(90, 103, 216, 0.5);
     }
 
-    .quantity.buttons_added {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-    }
-
-    .quantity.buttons_added input[type="number"] {
-        width: 60px;
-        text-align: center;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        padding: 5px;
-    }
-
-    .quantity.buttons_added input[type="button"] {
-        background-color: #f5f5f5;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        width: 30px;
-        height: 30px;
-        text-align: center;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-
-    .quantity.buttons_added input[type="button"]:hover {
-        background-color: #e0e0e0;
-    }
-
-    .js-addcart-detail {
-        margin-left: 15px;
-        padding: 8px 20px;
-        border: none;
-        border-radius: 4px;
+    .search-button {
+        padding: 10px 20px;
+        background-color: #5a67d8;
         color: #fff;
-        font-weight: bold;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
         cursor: pointer;
-        transition: background-color 0.3s;
+        transition: all 0.3s ease;
     }
 
-    .js-addcart-detail:hover {
-        background-color: #e5574f;
+    .search-button:hover {
+        background-color: #434bb4;
     }
+
+    /* المنتجات */
+    .products-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+        margin-top: 30px;
+        padding: 0 20px;
+    }
+
+    .product-card {
+        width: 250px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        overflow: hidden;
+        background-color: #fff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .product-card:hover {
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        transform: translateY(-5px);
+    }
+
+    .product-image {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .product-image img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    .quick-view {
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: rgba(0, 0, 0, 0.6);
+        color: #fff;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 14px;
+        text-align: center;
+        text-decoration: none;
+        opacity: 0;
+        transition: all 0.3s ease;
+    }
+
+    .product-image:hover .quick-view {
+        opacity: 1;
+    }
+
+    .product-info {
+        padding: 15px;
+        text-align: center;
+    }
+
+    .product-name {
+        font-size: 18px;
+        color: #333;
+        margin: 10px 0;
+    }
+
+    .product-price {
+        font-size: 16px;
+        color: #5a67d8;
+        font-weight: bold;
+    }
+    .favorite-button {
+    color: #333; /* اللون الافتراضي */
+    transition: color 0.3s ease;
+    }
+
+    .favorite-button.active {
+        color: red; /* اللون عند الإضافة للمفضلة */
+    }
+
 </style>
 
 
@@ -151,12 +135,12 @@
         <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item">
             <div class="block2">
                 <div class="block2-pic hov-img0">
-                    <img src="{{ asset('images/' . ($product->image ? $product->image->path : 'default.jpg')) }}"
+                    <img src="{{ $product->image ? asset('images/' . $product->image->path) : asset('images/default.jpg') }}"
                         alt="IMG-PRODUCT">
-                        <a href="#"
+
+                    <a href="#"
                         class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1"
-                        data-id="{{ $product->id }}"
-                        data-price="{{ $product->price }}">Quick View</a>
+                        data-id="{{ $product->id }}" data-price="{{ $product->price }}">Quick View</a>
                 </div>
                 <div class="block2-txt flex-w flex-t p-t-14">
                     <div class="block2-txt-child1 flex-col-l">
@@ -166,8 +150,24 @@
                         <span class="stext-105 cl3">
                             {{ $product->price }}
                         </span>
+
                     </div>
+
                 </div>
+                <div class="flex-m bor9 p-r-10 m-r-11">
+                    <!-- نموذج إضافة المنتج إلى المفضلة -->
+                    <form class="favorite-form" method="POST">
+                        @csrf
+                        <input type="hidden" class="product-id" value="{{ $product->id }}">
+                        <button type="button" class="favorite-button fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 tooltip100"
+                            data-tooltip="Add to favorite"
+                            style="border: none; background: none; cursor: pointer; padding-left: 250px; bottom: 30px; font-size: x-large;">
+                            <i class="zmdi zmdi-favorite"></i>
+                        </button>
+                    </form>
+                </div>
+
+
             </div>
         </div>
     @endforeach
@@ -184,7 +184,7 @@
                 <img src="{{ asset('assets/images/icons/icon-close.png') }}" alt="CLOSE">
             </button>
 
-            <div class="row">
+            <div  class="row">
                 <!-- قسم الصور -->
                 <div class="col-md-6 col-lg-7 p-b-30">
                     <div class="p-l-25 p-r-30 p-lr-0-lg">
@@ -225,8 +225,8 @@
 
 
                 <!-- قسم تفاصيل المنتج -->
-                <div class="col-md-6 col-lg-5 p-b-30">
-                    <div class="p-r-50 p-t-5 p-lr-0-lg">
+                <div  class="col-md-6 col-lg-5 p-b-30" style="padding-left: 30px;">
+                    <div class="p-r-50 p-t-5 p-lr-0-lg"  style="padding-left: 30px;">
                         <h4 class="mtext-105 cl2 js-name-detail p-b-14 ">
                             {{ $product->trans_name }}
                         </h4>
@@ -244,7 +244,9 @@
                         <div class="p-t-33">
                             <!-- خيار الحجم -->
                             <div class="flex-w flex-r-m p-b-20">
-                                <div class="size-203 flex-c-m respon6"><i class="fa fa-arrows-alt"></i> Size</div>
+                                <div class="size-203 flex-c-m respon6"><i class="fa fa-arrows-alt"></i>
+                                    {{ __('front.Size') }}
+                                </div>
                                 <div class="size-204 respon6-next">
                                     <div class="rs1-select2 bor8 bg0">
                                         <select class="custom-select-field">
@@ -262,7 +264,9 @@
 
                             <!-- خيار اللون -->
                             <div class="flex-w flex-r-m p-b-20">
-                                <div class="size-203 flex-c-m respon6"><i class="fa fa-paint-brush"></i> Color</div>
+                                <div class="size-203 flex-c-m respon6"><i class="fa fa-paint-brush"></i>
+                                    {{ __('front.Color') }}
+                                </div>
                                 <div class="size-204 respon6-next">
                                     <div class="rs1-select2 bor8 bg0">
                                         <select class="custom-select-field">
@@ -280,7 +284,9 @@
                             <!-- كمية المنتج وزر الإضافة إلى السلة -->
                             <div class="quantity-content">
                                 <div class="left-content">
-                                    <h6>No. of Orders</h6>
+                                    <h6>
+                                        {{ __('front.No') }}
+                                    </h6>
                                 </div>
                                 <div class="right-content">
                                     <div class="quantity buttons_added">
@@ -296,50 +302,21 @@
                                     <!-- زر إضافة إلى السلة -->
                                     <form id="cart-form" action="{{ route('front.shoping') }}" method="POST">
                                         @csrf
-                                        <input type="hidden" name="product_id" value=""> <!-- يتم تحديثه ديناميكيًا -->
+                                        <input type="hidden" name="product_id" value="">
+                                        <!-- يتم تحديثه ديناميكيًا -->
                                         <input type="hidden" name="product_name" value="">
-                                        <input type="hidden" name="quantity" value=""> <!-- الكمية المبدئية -->
-                                        <button type="submit" onclick="addToCart(event)" class="btn btn-primary">Add to cart</button>
-                                    </form>
-
-
-
-
-                                </div>
-                            </div>
-
-                            <!-- روابط التواصل الاجتماعي -->
-                            <div class="flex-w flex-m p-l-100 p-t-40 respon7">
-                                <div class="flex-m bor9 p-r-10 m-r-11">
-                                    <!-- نموذج إضافة المنتج إلى المفضلة -->
-                                    <form id="favorite-form" action="{{ route('front.favorites') }}" method="POST">
-                                        @csrf
-                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                        <button type="submit" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 tooltip100"
-                                            data-tooltip="Add to favorite" style="border: none; background: none; cursor: pointer;">
-                                            <i class="zmdi zmdi-favorite"></i>
+                                        <input type="hidden" name="quantity" value="">
+                                        <!-- الكمية المبدئية -->
+                                        <button type="submit" onclick="addToCart(event)" class="btn btn-primary">
+                                            {{ __('front.Add') }}
                                         </button>
                                     </form>
+
+
+
                                 </div>
-
-                                <a href="#"
-                                    class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 m-r-8 tooltip100"
-                                    data-tooltip="Share on Facebook">
-                                    <i class="fa fa-facebook"></i>
-                                </a>
-
-                                <a href="#"
-                                    class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 m-r-8 tooltip100"
-                                    data-tooltip="Share on Twitter">
-                                    <i class="fa fa-twitter"></i>
-                                </a>
-
-                                <a href="#"
-                                    class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 m-r-8 tooltip100"
-                                    data-tooltip="Share on Google Plus">
-                                    <i class="fa fa-google-plus"></i>
-                                </a>
                             </div>
+
                         </div>
                     </div>
 
@@ -351,8 +328,8 @@
 </div>
 
 <script>
-    $(document).ready(function () {
-        $('.js-show-modal1').click(function (e) {
+    $(document).ready(function() {
+        $('.js-show-modal1').click(function(e) {
             e.preventDefault();
 
             var productId = $(this).data('id');
@@ -370,16 +347,16 @@
             $.ajax({
                 url: '/product/' + productId,
                 type: 'GET',
-                success: function (response) {
+                success: function(response) {
                     $('.js-name-detail').text(response.name);
                     $('.mtext-106.cl2').text('$' + response.price);
                     $('.stext-102.cl3').text(response.description);
 
                     // تحديث الصورة الرئيسية
                     const mainImage = document.querySelector('.main-image img');
-                    mainImage.src = response.image
-                        ? '/images/' + response.image
-                        : '/images/default-image.jpg';
+                    mainImage.src = response.image ?
+                        '/images/' + response.image :
+                        '/images/default-image.jpg';
 
                     // تحديث الصور المصغرة
                     const thumbnailsContainer = document.querySelector('.thumbnails');
@@ -394,7 +371,7 @@
                             `;
 
                             // إضافة حدث عند الضغط على الصورة المصغرة لتحديث الصورة الرئيسية
-                            thumbnail.addEventListener('click', function () {
+                            thumbnail.addEventListener('click', function() {
                                 mainImage.src = '/images/' + img.path;
                             });
 
@@ -409,33 +386,31 @@
                         `;
 
                         // إضافة حدث عند الضغط على الصورة المصغرة الافتراضية
-                        thumbnail.addEventListener('click', function () {
+                        thumbnail.addEventListener('click', function() {
                             mainImage.src = '/images/default-thumbnail.jpg';
                         });
 
                         thumbnailsContainer.appendChild(thumbnail);
                     }
                 },
-                error: function () {
+                error: function() {
                     console.error('Error loading product details');
                 }
             });
 
             $('.js-modal1').addClass('show-modal1');
         });
-               // إخفاء المودال عند الضغط على زر الإغلاق
-               $('.js-hide-modal1').click(function() {
+        // إخفاء المودال عند الضغط على زر الإغلاق
+        $('.js-hide-modal1').click(function() {
             $('.js-modal1').removeClass('show-modal1');
         });
     });
-
-
 </script>
 
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         // تحديث الكمية عند تغيير الزر (+) أو (-)
-        $('.buttons_added .minus, .buttons_added .plus').click(function () {
+        $('.buttons_added .minus, .buttons_added .plus').click(function() {
             let input = $(this).parent().find('.qty'); // حقل إدخال الكمية
             let quantity = parseInt(input.val()) || 1;
 
@@ -451,7 +426,7 @@
         });
 
         // مستمع لتغيير الكمية يدويًا
-        $('.qty').on('change', function () {
+        $('.qty').on('change', function() {
             let quantity = parseInt($(this).val()) || 1; // تأكد من إدخال قيمة صالحة
             if (quantity < 1) quantity = 1; // إعادة تعيين القيم السلبية إلى 1
 
@@ -461,7 +436,7 @@
         });
 
         // فتح المودال وتحديث البيانات
-        $('.js-show-modal1').click(function () {
+        $('.js-show-modal1').click(function() {
             let price = $(this).data('price');
 
             // تحديث البيانات في المودال
@@ -473,7 +448,7 @@
         });
 
         // إغلاق المودال وإعادة تعيين الكمية
-        $('.js-hide-modal1').click(function () {
+        $('.js-hide-modal1').click(function() {
             $('.qty').val(1);
             updateTotal();
             updateHiddenQuantity(1);
@@ -532,35 +507,172 @@
     });
 </script>
 
-
 <script>
-    function addToCart(event) {
-        event.preventDefault();
+    document.getElementById('searchForm').addEventListener('submit', function(e) {
+        e.preventDefault(); // منع إعادة تحميل الصفحة
 
-        // تحديث الكمية من الحقل
-        const quantity = document.querySelector('.qty').value;
+        const query = document.getElementById('query').value.trim(); // قيمة البحث
+        const dataContainer = document.getElementById('dataContainer'); // الحاوية الخاصة بالمنتجات
 
-        // تحديث حقل الكمية داخل النموذج
-        document.querySelector('input[name="quantity"]').value = quantity;
+        // عرض رسالة أثناء البحث داخل الحاوية
+        dataContainer.innerHTML = '<p class="text-center">جاري البحث...</p>';
 
-        // إرسال النموذج
-        document.getElementById('cart-form').submit();
-    }
+        // إرسال طلب البحث باستخدام AJAX
+        fetch('{{ route('search') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                },
+                body: JSON.stringify({
+                    query: query
+                }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // مسح جميع المنتجات السابقة
+                dataContainer.innerHTML = '';
 
+                // التحقق من وجود منتجات
+                if (data.products && data.products.length > 0) {
+                    data.products.forEach(product => {
+                        const productHTML = `
+                            <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item">
+                                <div class="block2">
+                                    <div class="block2-pic hov-img0">
+                                        <img src="${product.image ? '/images/' + product.image.path : '/images/default.jpg'}" alt="${product.trans_name || 'منتج'}">
+                                        <a href="#"
+                                            class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1"
+                                            data-id="${product.id}"
+                                            data-price="${product.price}">Quick View</a>
+                                    </div>
+                                    <div class="block2-txt flex-w flex-t p-t-14">
+                                        <div class="block2-txt-child1 flex-col-l">
+                                            <a href="#" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                                ${product.name || 'غير محدد'}
+                                            </a>
+                                            <span class="stext-105 cl3">
+                                                $${parseFloat(product.price).toFixed(2)}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        dataContainer.insertAdjacentHTML('beforeend', productHTML);
+                    });
+                } else {
+                    // عرض رسالة "لم يتم العثور على نتائج"
+                    dataContainer.innerHTML = '<p class="text-center">لم يتم العثور على نتائج.</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching search results:', error);
+                dataContainer.innerHTML =
+                    '<p class="text-center text-danger">حدث خطأ أثناء البحث. الرجاء المحاولة لاحقًا.</p>';
+            });
+    });
 </script>
 
 <script>
-    function addToFavorite(event) {
-        event.preventDefault();
+        $(document).ready(function() {
+            // تحديث حالة الزر بناءً على حالة المفضلة
+            $('.favorite-button').each(function() {
+                const button = $(this);
+                const productId = button.siblings('.product-id').val();
 
-        // تحديث الكمية من الحقل
-        const quantity = document.querySelector('.qty').value;
+                $.ajax({
+                    url: "{{ route('front.favorites.isFavorite') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        product_id: productId,
+                    },
+                    success: function(response) {
+                        if (response.isFavorite) {
+                            button.addClass('active'); // أضف اللون الأحمر إذا كان في المفضلة
+                        }
+                    },
+                    error: function() {
+                        console.error('Failed to fetch favorite status.');
+                    }
+                });
+            });
 
-        // تحديث حقل الكمية داخل النموذج
-        document.querySelector('input[name="quantity"]').value = quantity;
+            // التعامل مع زر الإضافة/الإزالة من المفضلة
+            $('.favorite-button').on('click', function(e) {
+                e.preventDefault();
 
-        // إرسال النموذج
-        document.getElementById('cart-form').submit();
-    }
+                const button = $(this);
+                const productId = button.siblings('.product-id').val();
+
+                $.ajax({
+                    url: "{{ route('front.favorites.toggle') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        product_id: productId,
+                    },
+                    success: function(response) {
+                        if (response.status === 'added') {
+                            button.addClass('active'); // أضف اللون الأحمر
+                        } else if (response.status === 'removed') {
+                            button.removeClass('active'); // أزل اللون الأحمر
+                        }
+                        alert(response.message);
+                    },
+                    error: function() {
+                        alert('Something went wrong. Please try again.');
+                    }
+                });
+            });
+        });
+        $(document).on('click', '.btn-remove', function(e) {
+            e.preventDefault();
+
+            const button = $(this);
+            const productId = button.data('id');
+
+            Swal.fire({
+                title: 'هل أنت متأكد؟',
+                text: "لن تتمكن من التراجع عن هذا!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'نعم، احذف!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: `/favorites/remove/${productId}`,
+                        type: 'DELETE',
+                        data: {
+                            _token: "{{ csrf_token() }}"
+                        },
+                        success: function() {
+                            button.closest('tr').remove(); // حذف الصف من الجدول
+                            updateFavoritesCount(); // تحديث عداد المفضلة
+                            Swal.fire(
+                                'تم الحذف!',
+                                'تم حذف المنتج من المفضلة.',
+                                'success'
+                            );
+                        },
+                        error: function() {
+                            Swal.fire(
+                                'خطأ!',
+                                'فشل في حذف المنتج من المفضلة.',
+                                'error'
+                            );
+                        }
+                    });
+                }
+            });
+        });
 
 </script>

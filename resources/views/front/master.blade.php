@@ -45,11 +45,199 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/util.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/main.css') }}">
 
+        <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- Material Design Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
+
     <!--===============================================================================================-->
     @yield('css')
+    @if (App::getLocale() == 'ar')
+    <style>
+        .topbar .dropdown .dropdown-menu {
+            right: -60%;
+        }
+
+        body {
+            direction: rtl;
+            text-align: right;
+        }
+
+        .sidebar {
+            padding: 0;
+        }
+
+        .sidebar .nav-item .nav-link {
+            text-align: right;
+            margin-right: 52px;
+        }
+
+        .sidebar .nav-item .nav-link[data-toggle=collapse]::after {
+            float: left;
+            transform: rotate(180deg);
+        }
+
+        .limiter-menu-desktop {
+            margin-right: 52px;
+        }
+
+        .main-menu {
+            padding-right: 24px;
+        }
+
+        .logo {
+            margin-left: 160px;
+        }
+
+        .limiter-menu-desktop {
+            margin-right: 200px;
+        }
+
+        .ml-auto,
+        .mx-auto {
+            margin-left: unset !important;
+            margin-right: auto !important;
+        }
+
+        /* عكس الصور الخلفية فقط */
+       /* عكس الصور الخلفية فقط */
+            .item-slick1::before {
+                content: "";
+                display: block;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-image: inherit;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+                transform: scaleX(-1);
+                z-index: -1;
+            }
+            .favorite-button{
+                padding-right: 230px;
+            }
+            .thumbnails{
+                right: -110px;
+            }
+    </style>
+@endif
+
+    <style>
+                /* تخصيص الأيقونات */
+        .wrap-icon-header .icon-header-item {
+            font-size: 18px;
+            color: #333;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .wrap-icon-header .icon-header-item:hover {
+            color: #007bff; /* لون عند التمرير */
+        }
+
+        /* تنسيق الفقاعة فوق الأيقونة */
+        .icon-header-noti {
+            position: relative;
+        }
+
+        .icon-header-noti::after {
+            content: attr(data-notify);
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: #ff3e3e;
+            color: #fff;
+            font-size: 12px;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        /* قائمة اللغات المنسدلة */
+        .dropdown-menu {
+            border-radius: 8px;
+            border: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .dropdown-toggle::after{
+            display: none;
+        }
+        .dropdown-item {
+            font-size: 14px;
+            padding: 10px 15px;
+            transition: background-color 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f8f9fa; /* لون الخلفية عند التمرير */
+            color: #007bff; /* لون النص عند التمرير */
+        }
+
+                /* تنسيق الرابط في القائمة */
+        .dropdown-item {
+            font-size: 14px;
+            padding: 10px 15px;
+            color: #333;
+            border-radius: 6px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        /* تأثير عند التمرير على العنصر */
+        .dropdown-item:hover {
+            background-color: #007bff; /* خلفية باللون الأزرق */
+            color: #fff; /* النص يصبح أبيض */
+        }
+
+        /* أيقونات بجانب أسماء اللغات */
+        .dropdown-item i {
+            color: #007bff; /* لون الأيقونة */
+            margin-right: 8px;
+            transition: color 0.3s ease;
+        }
+
+        .dropdown-item:hover i {
+            color: #fff; /* تغيير لون الأيقونة عند التمرير */
+        }
+
+        /* القائمة نفسها */
+        .dropdown-menu {
+            border-radius: 8px;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* ظل خفيف */
+            animation: fadeIn 0.3s ease;
+                }
+                /* العنصر الأساسي للأيقونة */
+            #favorites-count {
+            position: absolute;
+            top: -5px;
+            right: -10px;
+            background-color: red;
+            color: white;
+            font-size: 12px;
+            border-radius: 50%;
+            padding: 2px 6px;
+            display: inline-block;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        #favorites-count:empty {
+            display: none;
+        }
 
 
-
+    </style>
 </head>
 
 <body class="animsition">
@@ -70,47 +258,65 @@
                 <div class="menu-desktop">
                     <ul class="main-menu">
                         <li class="active-menu">
-                            <a href="{{ route('front.index') }}">Home</>
+                            <a href="{{ route('front.index') }}"> {{ __('front.home') }}</>
                         </li>
 
                         <li class="label1" data-label1="hot">
-                            <a href="{{ route('front.products') }}">Shop</a>
+                            <a href="{{ route('front.products') }}"> {{ __('front.shop') }}</a>
                         </li>
 
                         <li>
-                            <a href="{{ route('front.shoping') }}">Features</a>
+                            <a href="{{ route('front.shoping') }}"> {{ __('front.features') }}</a>
                         </li>
 
                         <li >
-                            <a href="blog.html">Blog</a>
+                            <a href="{{ route('front.blog') }}">{{ __('front.blog') }}</a>
                         </li>
 
                         <li>
-                            <a href="about.html">About</a>
+                            <a href="{{ route('front.about') }}">{{ __('front.about') }}</a>
                         </li>
 
                         <li>
-                            <a href="contact.html">Contact</a>
+                            <a href="{{ route('front.contact') }}">{{ __('front.contact') }}</a>
                         </li>
                     </ul>
                 </div>
 
                 <!-- Icon header -->
                 <div class="wrap-icon-header flex-w flex-r-m">
-                    <div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 js-show-modal-search">
-                        <i class="zmdi zmdi-search"></i>
-                    </div>
+                    <li class="nav-item dropdown no-arrow">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small" style="color:#242f2f;">
+                                <i class="fas fa-globe"></i>
+                                {{ __('admin.langs') }}</span>
+
+                        </a>
+                        <!-- Dropdown - User Information -->
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                            aria-labelledby="userDropdown">
+                            @foreach (LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+                                <a class="dropdown-item" rel="alternate" hreflang="{{ $localeCode }}"
+                                    href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}">
+                                    {{ $properties['native'] }}
+                                </a>
+                            @endforeach
+
+                        </div>
+                    </li>
 
                     <div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart"
-                        data-notify="2">
-                        <i class="zmdi zmdi-shopping-cart"></i>
-                    </div>
+                    data-notify="{{ session('cart') ? count(session('cart')) : 0 }}">
+                    <i class="zmdi zmdi-shopping-cart"></i>
+                </div>
 
-                    <a href="{{ route('front.favorites') }}"
-                        class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti"
-                        data-notify="0">
-                        <i class="zmdi zmdi-favorite-outline"></i>
-                    </a>
+                <a href="{{ route('front.favorites') }}"
+                class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10">
+                <i class="zmdi zmdi-favorite-outline"></i>
+                <span id="favorites-count" class="icon-header-noti">{{ $favoritesCount ?? 0 }}</span>
+                </a>
+
                 </div>
             </nav>
         </div>
@@ -124,20 +330,40 @@
 
             <!-- Icon header -->
             <div class="wrap-icon-header flex-w flex-r-m m-r-15">
-                <div class="icon-header-item cl2 hov-cl1 trans-04 p-r-11 js-show-modal-search">
-                    <i class="zmdi zmdi-search"></i>
-                </div>
+                   <li class="nav-item dropdown no-arrow">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small" style="color:#242f2f;">
+                                <i class="fas fa-globe"></i>
+                                {{ __('admin.langs') }}</span>
 
-                <div class="icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10 icon-header-noti js-show-cart"
-                    data-notify="2">
+                        </a>
+                        <!-- Dropdown - User Information -->
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                            aria-labelledby="userDropdown">
+                            @foreach (LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+                                <a class="dropdown-item" rel="alternate" hreflang="{{ $localeCode }}"
+                                    href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}">
+                                    {{ $properties['native'] }}
+                                </a>
+                            @endforeach
+
+                        </div>
+                    </li>
+
+                    <div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart"
+                    data-notify="{{ session('cart') ? count(session('cart')) : 0 }}">
                     <i class="zmdi zmdi-shopping-cart"></i>
                 </div>
 
                 <a href="{{ route('front.favorites') }}"
-                    class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10 icon-header-noti"
-                    data-notify="0">
-                    <i class="zmdi zmdi-favorite-outline"></i>
-                </a>
+                class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10">
+                <i class="zmdi zmdi-favorite-outline"></i>
+                <span id="favorites-count" class="icon-header-noti"></span>
+             </a>
+
+
+
             </div>
 
 
@@ -185,158 +411,7 @@
     </header>
     @yield('content')
 
-    <!-- Footer -->
-    <footer class="bg3 p-t-75 p-b-32">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-6 col-lg-3 p-b-50">
-                    <h4 class="stext-301 cl0 p-b-30">
-                        Categories
-                    </h4>
-
-                    <ul>
-                        <li class="p-b-10">
-                            <a href="#" class="stext-107 cl7 hov-cl1 trans-04">
-                                Women
-                            </a>
-                        </li>
-
-                        <li class="p-b-10">
-                            <a href="#" class="stext-107 cl7 hov-cl1 trans-04">
-                                Men
-                            </a>
-                        </li>
-
-                        <li class="p-b-10">
-                            <a href="#" class="stext-107 cl7 hov-cl1 trans-04">
-                                Shoes
-                            </a>
-                        </li>
-
-                        <li class="p-b-10">
-                            <a href="#" class="stext-107 cl7 hov-cl1 trans-04">
-                                Watches
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="col-sm-6 col-lg-3 p-b-50">
-                    <h4 class="stext-301 cl0 p-b-30">
-                        Help
-                    </h4>
-
-                    <ul>
-                        <li class="p-b-10">
-                            <a href="#" class="stext-107 cl7 hov-cl1 trans-04">
-                                Track Order
-                            </a>
-                        </li>
-
-                        <li class="p-b-10">
-                            <a href="#" class="stext-107 cl7 hov-cl1 trans-04">
-                                Returns
-                            </a>
-                        </li>
-
-                        <li class="p-b-10">
-                            <a href="#" class="stext-107 cl7 hov-cl1 trans-04">
-                                Shipping
-                            </a>
-                        </li>
-
-                        <li class="p-b-10">
-                            <a href="#" class="stext-107 cl7 hov-cl1 trans-04">
-                                FAQs
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="col-sm-6 col-lg-3 p-b-50">
-                    <h4 class="stext-301 cl0 p-b-30">
-                        GET IN TOUCH
-                    </h4>
-
-                    <p class="stext-107 cl7 size-201">
-                        Any questions? Let us know in store at 8th floor, 379 Hudson St, New York, NY 10018 or call us
-                        on (+1) 96 716 6879
-                    </p>
-
-                    <div class="p-t-27">
-                        <a href="#" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
-                            <i class="fa fa-facebook"></i>
-                        </a>
-
-                        <a href="#" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
-                            <i class="fa fa-instagram"></i>
-                        </a>
-
-                        <a href="#" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
-                            <i class="fa fa-pinterest-p"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="col-sm-6 col-lg-3 p-b-50">
-                    <h4 class="stext-301 cl0 p-b-30">
-                        Newsletter
-                    </h4>
-
-                    <form>
-                        <div class="wrap-input1 w-full p-b-4">
-                            <input class="input1 bg-none plh1 stext-107 cl7" type="text" name="email"
-                                placeholder="email@example.com">
-                            <div class="focus-input1 trans-04"></div>
-                        </div>
-
-                        <div class="p-t-18">
-                            <button class="flex-c-m stext-101 cl0 size-103 bg1 bor1 hov-btn2 p-lr-15 trans-04">
-                                Subscribe
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <div class="p-t-40">
-                <div class="flex-c-m flex-w p-b-18">
-                    <a href="#" class="m-all-1">
-                        <img src="{{ asset('assets/images/icons/icon-pay-01.png') }}" alt="ICON-PAY">
-                    </a>
-
-                    <a href="#" class="m-all-1">
-                        <img src="{{ asset('assets/images/icons/icon-pay-02.png') }}" alt="ICON-PAY">
-                    </a>
-
-                    <a href="#" class="m-all-1">
-                        <img src="{{ asset('assets/images/icons/icon-pay-03.png') }}" alt="ICON-PAY">
-                    </a>
-
-                    <a href="#" class="m-all-1">
-                        <img src="{{ asset('assets/images/icons/icon-pay-04.png') }}" alt="ICON-PAY">
-                    </a>
-
-                    <a href="#" class="m-all-1">
-                        <img src="{{ asset('assets/images/icons/icon-pay-05.png') }}" alt="ICON-PAY">
-                    </a>
-                </div>
-
-                <p class="stext-107 cl6 txt-center">
-                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                    Copyright &copy;
-                    <script>
-                        document.write(new Date().getFullYear());
-                    </script> All rights reserved | Made with <i class="fa fa-heart-o"
-                        aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a> &amp;
-                    distributed by <a href="https://themewagon.com" target="_blank">ThemeWagon</a>
-                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-
-                </p>
-            </div>
-        </div>
-    </footer>
-
+     @include('front.partials.footer')
 
     <!-- Back to top -->
     <div class="btn-back-to-top" id="myBtn">
@@ -393,7 +468,6 @@
     <script src="{{ asset('assets/vendor/isotope/isotope.pkgd.min.js') }}"></script>
 
 
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const searchInput = document.getElementById('search-input');
@@ -438,6 +512,28 @@
         });
     </script>
 
+<script>
+    $(document).ready(function() {
+        // تحديث عدد المفضلات عند التحميل
+        function updateFavoritesCount() {
+            $.ajax({
+                url: "{{ route('front.favorites.count') }}",
+                type: "GET",
+                success: function(response) {
+                    $('#favorites-count').text(response.count); // تحديث العدد في الأيقونة
+                },
+                error: function() {
+                    console.error('Failed to fetch favorites count.');
+                }
+            });
+        }
+
+        // استدعاء الدالة عند التحميل
+        updateFavoritesCount();
+    });
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!--===============================================================================================-->
     <script src="{{ asset('assets/vendor/sweetalert/sweetalert.min.js') }}"></script>

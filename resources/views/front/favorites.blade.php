@@ -92,15 +92,17 @@
 
 
     <!-- breadcrumb -->
-    <div class="container"> 
+    <div class="container">
         <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
             <a href="index.html" class="stext-109 cl8 hov-cl1 trans-04">
-                Home
+                <a href="{{ route('front.index') }}"> {{ __('front.home') }}</>
+
                 <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
             </a>
 
             <span class="stext-109 cl4">
-                Favorites
+                <a href="{{ route('front.favorites') }}"> {{ __('front.favorites') }}</>
+
             </span>
         </div>
     </div>
@@ -114,27 +116,77 @@
                     <div class="m-l-25 m-r--38 m-lr-0-xl">
                         <div class="wrap-table-shopping-cart">
 
-
                             <table class="table-shopping-cart">
-                                <th class="column-1">Image</th>
-                                <th class="column-2">Product</th>
-                                <th class="column-3">Price</th>
-                                <th class="column-4">Quantity</th>
-                                <th class="column-5">Total</th>
-                                </tr>
+                                <thead>
+                                    <tr>
+                                    <tr>
+                                        <th class="column-1"
+                                            style="padding: 10px 15px; text-align: center; font-weight: bold; font-size: 16px; background-color: #f5f5f5; border-bottom: 2px solid #ddd;">
+                                             {{ __('front.Image') }}
+                                        </th>
+                                        <th class="column-2"
+                                            style="padding: 10px 15px; text-align: center; font-weight: bold; font-size: 16px; background-color: #f5f5f5; border-bottom: 2px solid #ddd;">
+                                             {{ __('front.Product') }}</th>
+                                        <th class="column-3"
+                                            style="padding: 10px 15px; text-align: center; font-weight: bold; font-size: 16px; background-color: #f5f5f5; border-bottom: 2px solid #ddd;">
+                                             {{ __('front.Price') }}</th>
 
-                                <tr class="table_row">
-                                    @foreach ($cart as $item)
-                                <tr>
-                                    <td><img src="{{ asset('images/' . $item->image) }}" alt="{{ $item->name }}"></td>
-                                    <td>{{ $item->name }}</td>
-                                    <td>${{ $item->price }}</td>
-                                    <td>{{ $item->quantity }}</td>
-                                    <td>${{ $item->price * $item->quantity }}</td>
-                                </tr>
-                                @endforeach
+                                        <th class="column-6"
+                                            style="padding: 10px 15px; text-align: center; font-weight: bold; font-size: 16px; background-color: #f5f5f5; border-bottom: 2px solid #ddd;">
+                                             {{ __('front.Remove') }}</th>
+                                    </tr>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($favorites as $favorite)
+                                        <tr class="table_row">
+                                            <!-- صورة المنتج -->
+                                            <td class="column-2"
+                                                style="padding: 10px 15px; font-weight: bold; text-align: center;">
+                                                <img src="{{ $favorite->product->image->path
+                                                    ? asset('images/' . $favorite->product->image->path)
+                                                    : asset('images/default.jpg') }}"
+                                                    alt="{{ $favorite->product->trans_name }}"
+                                                    style="width: 100px; height: auto;">
+
+                                            </td>
+                                            <!-- اسم المنتج -->
+                                            <td class="column-2"
+                                                style="padding: 10px 15px; font-weight: bold; text-align: center;">
+                                                {{ $favorite->product->trans_name }}</td>
+                                            <!-- السعر -->
+                                            <td class="column-2"
+                                                style="padding: 10px 15px; font-weight: bold; text-align: center;">
+                                                ${{ $favorite->product->price }}</td>
+
+                                                <td class="column-6" style="padding: 10px; text-align: center;">
+                                                    <a href="#"
+                                                        class="btn-remove"
+                                                        onclick="confirmDelete(event, '{{ route('favorites.remove', $favorite->id) }}')"
+                                                        style="
+                                                            background-color: #ff4d4d;
+                                                            color: white;
+                                                            width: 25px;
+                                                            height: 25px;
+                                                            display: flex;
+                                                            justify-content: center;
+                                                            align-items: center;
+                                                            border-radius: 50%;
+                                                            font-size: 16px;
+                                                            text-decoration: none;
+                                                            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+                                                            transition: all 0.3s ease;">
+                                                        <i class="fa fa-trash"></i>
+                                                    </a>
+                                                </td>
+
+
+                                        </tr>
+                                    @endforeach
+                                </tbody>
 
                             </table>
+
                         </div>
 
 
@@ -193,6 +245,36 @@
             });
             document.querySelector('#cart-total').textContent = `$${total.toFixed(2)}`;
         }
+    </script>
+
+    <script>
+     function confirmDelete(event, deleteUrl) {
+    event.preventDefault(); // منع السلوك الافتراضي للنقرة
+
+    if (confirm('هل تريد الحذف؟')) { // نافذة تأكيد الحذف
+        fetch(deleteUrl, {
+            method: 'DELETE', // طريقة الحذف DELETE
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'Content-Type': 'application/json', // تحديد نوع البيانات
+            },
+        })
+        .then(response => {
+            if (response.ok) {
+                // حذف الصف المرتبط بالزر
+                const button = event.target.closest('tr');
+                if (button) button.remove(); // حذف العنصر من الواجهة
+            } else {
+                alert('فشل في حذف المنتج.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('حدث خطأ أثناء محاولة الحذف.');
+        });
+    }
+}
+
     </script>
 @endsection
 @endsection

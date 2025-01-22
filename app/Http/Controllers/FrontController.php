@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use App\Models\Silder;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Favorite;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class FrontController extends Controller
 {
@@ -19,8 +22,9 @@ class FrontController extends Controller
         $products = Product::latest('id')->paginate(4);
 
         $categories = Category::all();
+        $silders = Silder::all();
 
-        return view('front.index' ,compact('categories','products'));
+        return view('front.index' ,compact('categories','products','silders'));
     }
 
 
@@ -92,35 +96,74 @@ class FrontController extends Controller
 
 
 
+        function shoping(Request $request)
+        {
+            $cart = Cart::where('user_id', auth()->id())->get();  // استرجاع سلة المستخدم
+            $products = Product::all();
+            $categories = Category::all();
+
+            return view('front.shoping',compact('categories','products','cart'));
+        }
+
+        public function favorites()
+        {
+            $favorites = Favorite::where('user_id', auth()->id())->with('product')->get();
+            $products = Product::all();
+            $categories = Category::all();
+            return view('front.favorites', compact('favorites','categories','products'));
+        }
+
+
+        public function search(Request $request)
+        {
+
+
+                $query = $request->input('query');
+
+                // البحث عن المنتجات حسب الاسم أو الوصف
+                $products = Product::where('name', 'like', "%$query%")
+                    ->orWhere('description', 'like', "%$query%")
+                    ->get();
+
+                // إعادة المنتجات مع الصور إذا كانت موجودة
+                $products->load('image', 'gallery');
+
+                // إعادة المنتجات كـ JSON
+                return response()->json(['products' => $products]);
+        }
+
+
+        public function blog()
+        {
+            $categories = Category::all();
+            $products = Product::latest('id')->paginate(4);
+
+            return view('front.blog', compact('categories', 'products'));
+        }
+
+        public function about()
+        {
+            $categories = Category::all();
+            $products = Product::latest('id')->paginate(4);
+
+            return view('front.about', compact('categories', 'products'));
+        }
+        public function contact()
+        {
+            $categories = Category::all();
+            $products = Product::latest('id')->paginate(4);
+
+            return view('front.contact', compact('categories', 'products'));
+        }
+
+        public function footer()
+        {
+            $categories = Category::all();
+            $products = Product::latest('id')->paginate(4);
+
+            return view('front.master', compact('categories', 'products'));
+        }
 
 
 
-    function shoping(Request $request){
-        $cart = Cart::where('user_id', auth()->id())->get();  // استرجاع سلة المستخدم
-        $products = Product::all();
-        return view('front.shoping',compact('products','cart'));
-
-     }
-     function favorites(Request $request){
-        $cart = Cart::where('user_id', auth()->id())->get();  // استرجاع سلة المستخدم
-        $products = Product::all();
-        return view('front.favorites',compact('products','cart'));
-
-     }
-
-
-     public function search(Request $request)
-     {
-         $query = $request->input('query');
-
-         // البحث في قاعدة البيانات عن المنتجات التي تحتوي على النص
-         $products = Product::where('trans_name', 'LIKE', "%{$query}%")
-                             ->orWhere('description', 'LIKE', "%{$query}%");
-
-
-         // إعادة النتائج بصيغة JSON
-         return response()->json($products);
-     }
-
-
-}
+    }

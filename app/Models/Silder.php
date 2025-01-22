@@ -3,25 +3,18 @@
 namespace App\Models;
 
 use App\Traits\Trans;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-class Favorite extends Model
+class Silder extends Model
 {
-
-    use HasFactory,Trans;
+    use HasFactory ,Trans;
 
     protected $guarded = [];
 
-    function users(){
-        return $this->belongsTo(User::class)->withDefault();
+    function cart(){
+        return $this->hasMany(Cart::class);
 
-    }
-
-    // حساب الإجمالي مباشرة
-    public function getTotalAttribute()
-    {
-        return $this->quantity * $this->price;
     }
 
     function image() {
@@ -30,11 +23,15 @@ class Favorite extends Model
                     ->where('type', 'main'); // تصفية الصور لتكون فقط من النوع 'main'
     }
 
-    // علاقة مع المنتج
-    public function product()
-    {
-        return $this->belongsTo(Product::class)->withDefault();
+
+
+
+    function getImgPathAttribute(){
+
+        $url='https://via.placeholder.com/100x80';
+        if($this->image){
+            $url =asset('images/'.$this->image->path);
+        }
+        return $url;
     }
-
-
 }

@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\Admin\CategoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\SilderController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\CategoryController;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 /*
@@ -29,6 +30,7 @@ Route::group(
 
             Route::resource('categories', CategoryController::class);
             Route::resource('products', ProductController::class);
+            Route::resource('silders',SilderController::class);
 
 
             Route::get(('/delete->image/{id?}'), [ProductController::class, 'delete_img'])->name('delete_img');

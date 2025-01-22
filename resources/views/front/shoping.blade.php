@@ -11,12 +11,14 @@
     <div class="container">
         <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
             <a href="index.html" class="stext-109 cl8 hov-cl1 trans-04">
-                Home
+                <a href="{{ route('front.index') }}"> {{ __('front.home') }}</>
+
                 <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
             </a>
 
             <span class="stext-109 cl4">
-                Shoping Cart
+                <a href="{{ route('front.shoping') }}"> {{ __('front.Shoping Cart') }}</>
+
             </span>
         </div>
     </div>
@@ -45,52 +47,70 @@
 
 
                             @if (session('cart'))
-                            <table class="table-shopping-cart" style="width: 100%; border-collapse: collapse; text-align: center;">
-                                <thead>
-                                    <tr>
-                                        <th class="column-1" style="padding: 10px 15px; text-align: center; font-weight: bold; font-size: 16px; background-color: #f5f5f5; border-bottom: 2px solid #ddd;">Image</th>
-                                        <th class="column-2" style="padding: 10px 15px; text-align: center; font-weight: bold; font-size: 16px; background-color: #f5f5f5; border-bottom: 2px solid #ddd;">Product</th>
-                                        <th class="column-3" style="padding: 10px 15px; text-align: center; font-weight: bold; font-size: 16px; background-color: #f5f5f5; border-bottom: 2px solid #ddd;">Price</th>
-                                        <th class="column-4" style="padding: 10px 15px; text-align: center; font-weight: bold; font-size: 16px; background-color: #f5f5f5; border-bottom: 2px solid #ddd;">Quantity</th>
-                                        <th class="column-5" style="padding: 10px 15px; text-align: center; font-weight: bold; font-size: 16px; background-color: #f5f5f5; border-bottom: 2px solid #ddd;">Total</th>
-                                        <th class="column-6" style="padding: 10px 15px; text-align: center; font-weight: bold; font-size: 16px; background-color: #f5f5f5; border-bottom: 2px solid #ddd;">Remove</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    @foreach (session('cart') as $id => $item)
+                                <table class="table-shopping-cart"
+                                    style="width: 100%; border-collapse: collapse; text-align: center;">
+                                    <thead>
                                         <tr>
-                                            <!-- الصورة -->
-                                            <td class="column-1" style="padding: 10px;">
-                                                <div class="cart-img-product" style="position: relative; display: inline-block; width: 100px;">
-                                                    <img src="{{ asset('images/' . $item['image']) }}" alt="{{ $item['name'] }}" style="width: 100%; border-radius: 8px;">
-                                                </div>
-                                            </td>
+                                            <th class="column-1"
+                                                style="padding: 10px 15px; text-align: center; font-weight: bold; font-size: 16px; background-color: #f5f5f5; border-bottom: 2px solid #ddd;">
+                                                Image</th>
+                                            <th class="column-2"
+                                                style="padding: 10px 15px; text-align: center; font-weight: bold; font-size: 16px; background-color: #f5f5f5; border-bottom: 2px solid #ddd;">
+                                                Product</th>
+                                            <th class="column-3"
+                                                style="padding: 10px 15px; text-align: center; font-weight: bold; font-size: 16px; background-color: #f5f5f5; border-bottom: 2px solid #ddd;">
+                                                Price</th>
+                                            <th class="column-4"
+                                                style="padding: 10px 15px; text-align: center; font-weight: bold; font-size: 16px; background-color: #f5f5f5; border-bottom: 2px solid #ddd;">
+                                                Quantity</th>
+                                            <th class="column-5"
+                                                style="padding: 10px 15px; text-align: center; font-weight: bold; font-size: 16px; background-color: #f5f5f5; border-bottom: 2px solid #ddd;">
+                                                Total</th>
+                                            <th class="column-6"
+                                                style="padding: 10px 15px; text-align: center; font-weight: bold; font-size: 16px; background-color: #f5f5f5; border-bottom: 2px solid #ddd;">
+                                                Remove</th>
+                                        </tr>
+                                    </thead>
 
-                                            <!-- اسم المنتج -->
-                                            <td class="column-2" style="padding: 10px 15px; font-weight: bold; text-align: center;">
-                                                {{ $item['name'] }}
-                                            </td>
+                                    <tbody>
+                                        @foreach (session('cart') as $id => $item)
+                                            <tr>
+                                                <!-- الصورة -->
+                                                <td class="column-1" style="padding: 10px;">
+                                                    <div class="cart-img-product"
+                                                        style="position: relative; display: inline-block; width: 100px;">
+                                                        <img src="{{ asset('images/' . $item['image']) }}"
+                                                            alt="{{ $item['name'] }}"
+                                                            style="width: 100%; border-radius: 8px;">
+                                                    </div>
+                                                </td>
 
-                                            <!-- السعر -->
-                                            <td class="column-3" style="padding: 10px 15px; text-align: center;">
-                                                ${{ number_format($item['price'], 2) }}
-                                            </td>
+                                                <!-- اسم المنتج -->
+                                                <td class="column-2"
+                                                    style="padding: 10px 15px; font-weight: bold; text-align: center;">
+                                                    {{ $item['name'] }}
+                                                </td>
 
-                                            <!-- الكمية -->
-                                            <td class="column-4" style="padding: 10px 15px; text-align: center;">
-                                                {{ $item['quantity'] }}
-                                            </td>
+                                                <!-- السعر -->
+                                                <td class="column-3" style="padding: 10px 15px; text-align: center;">
+                                                    ${{ number_format($item['price'], 2) }}
+                                                </td>
 
-                                            <!-- المجموع -->
-                                            <td class="column-5" style="padding: 10px 15px; font-weight: bold; text-align: center;">
-                                                ${{ number_format($item['price'] * $item['quantity'], 2) }}
-                                            </td>
+                                                <!-- الكمية -->
+                                                <td class="column-4" style="padding: 10px 15px; text-align: center;">
+                                                    {{ $item['quantity'] }}
+                                                </td>
 
-                                            <!-- زر الإزالة -->
-                                            <td class="column-6" style="padding: 10px; text-align: center;">
-                                                <a href="{{ route('cart.remove', $id) }}" class="btn-remove"
-                                                    style="
+                                                <!-- المجموع -->
+                                                <td class="column-5"
+                                                    style="padding: 10px 15px; font-weight: bold; text-align: center;">
+                                                    ${{ number_format($item['price'] * $item['quantity'], 2) }}
+                                                </td>
+
+                                                <!-- زر الإزالة -->
+                                                <td class="column-6" style="padding: 10px; text-align: center;">
+                                                    <a href="{{ route('cart.remove', $id) }}" class="btn-remove"
+                                                        style="
                                                         background-color: #ff4d4d;
                                                         color: white;
                                                         width: 25px;
@@ -103,17 +123,17 @@
                                                         text-decoration: none;
                                                         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
                                                         transition: all 0.3s ease;">
-                                                                                <i class="fa fa-trash"></i>
+                                                        <i class="fa fa-trash"></i>
 
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        @else
-                            <p>Your cart is empty.</p>
-                        @endif
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            @else
+                                <p>Your cart is empty.</p>
+                            @endif
 
                         </div>
 

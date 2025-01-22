@@ -84,3 +84,24 @@
 
        </div>
    </div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const cartIcon = document.querySelector('.icon-header-noti');
+
+    // وظيفة لتحديث عدد المنتجات في السلة
+    function updateCartCount() {
+        fetch('/cart/count') // مسار مخصص للحصول على عدد المنتجات
+            .then(response => response.json())
+            .then(data => {
+                cartIcon.setAttribute('data-notify', data.count);
+            })
+            .catch(error => console.error('Error updating cart count:', error));
+    }
+
+    // تحديث العدد عند تحميل الصفحة
+    updateCartCount();
+
+    // يمكن استدعاء هذه الوظيفة يدويًا عند إضافة أو حذف منتج
+});
+
+</script>

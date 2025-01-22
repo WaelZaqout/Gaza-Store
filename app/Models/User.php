@@ -77,6 +77,9 @@ class User extends Authenticatable implements MustVerifyEmail
     function testimonials(){
         return $this->hasMany(testimonials::class);
     }
-
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class); // أو belongsToMany حسب التصميم
+    }
 
 }

@@ -55,7 +55,21 @@
                 </div>
             </div>
         </li>
+        <hr class="sidebar-divider my-0">
 
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSliders"
+                aria-expanded="true" aria-controls="collapseProducts">
+               <i class="fas fa-closed-captioning"></i>
+                <span>{{ __('admin.sliders') }}</span>
+            </a>
+            <div id="collapseSliders" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" href="{{ route('admin.silders.index') }}">{{ __('admin.all_sliders') }}</a>
+                    <a class="collapse-item" href="{{ route('admin.silders.create') }}">{{ __('admin.add_new') }}</a>
+                </div>
+            </div>
+        </li>
         <hr class="sidebar-divider my-0">
 
         <!-- Nav Item - Dashboard -->
