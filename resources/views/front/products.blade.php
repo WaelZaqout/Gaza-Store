@@ -32,14 +32,16 @@
                     @endforeach
 
                 </div>
-                    <div class="search-container">
-                        <form id="searchForm" class="search-form">
-                            <input type="text" id="query" name="query" placeholder="  {{ __('front.search pro') }} ..."
+
+                <div class="search-container">
+                    <form id="searchForm" class="search-form">
+
+                        <input type="text" id="query" name="query" placeholder="  {{ __('front.search pro') }} ..."
                             class="search-input">
 
-                                    <button type="submit" class="search-button">  {{ __('front.search') }}</button>
-                        </form>
-                    </div>
+                            <button type="submit" class="search-button">  {{ __('front.search') }}</button>
+                    </form>
+                </div>
 
                     <div class="products-container" id="productsContainer"></div>
 
@@ -51,7 +53,7 @@
                     @include('front.partials.products')
             </div>
 
-            <div class="flex-c-m flex-w w-full p-t-45">
+            <div class="flex-c-m flex-w w-full p-t-45" >
                 <div class="page-links">
                     {{ $products->links() }} <!-- يستخدم Laravel pagination التلقائي -->
                 </div>

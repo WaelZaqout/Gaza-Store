@@ -16,6 +16,8 @@
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+
 
     <!-- Custom styles for this template-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
@@ -139,49 +141,6 @@
                             </div>
                         </li>
 
-                        {{-- <!-- Nav Item - Alerts -->
-                        <li class="nav-item dropdown no-arrow mx-1">
-                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-bell fa-fw"></i>
-                                <!-- Counter - Alerts -->
-                                @php
-                                   $count= Auth::user()->unreadnotifications->count();
-                                @endphp
-
-                             <span  class=" {{ $count==0 ?'d-none' :''}} badge badge-danger badge-counter" data-count="{{ $count }}">
-                                @php
-                                      if($count >5){
-                                        echo   '5+' ;
-                                      }else{
-                                        echo $count;
-                                      }
-                                @endphp
-                            </span>
-                            </a>
-                            <!-- Dropdown - Alerts -->
-                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="alertsDropdown">
-                                <h6 class="dropdown-header">
-                                    Notification Center
-                                </h6>
-                                @foreach (Auth::user()->notifications()->take(5)->get() as $item)
-                                    <a class="dropdown-item d-flex align-items-center {{ $item->read_at? '': 'bg-light' }}" href="{{ $item->data['url'] }}?id={{ $item->id }}">
-                                        <div>
-                                            <div class="small text-gray-500">{{ $item->created_at->format('F d ,Y') }}
-                                            </div>
-                                            <span class="font-weight-bold">{{ $item->data['msg'] }}</span>
-                                        </div>
-                                    </a>
-                                @endforeach
-
-                                <a class="dropdown-item text-center small text-gray-500"
-                                    href="{{ route('admin.notifications') }}">Show All
-                                    Alerts</a>
-                            </div>
-                        </li> --}}
-
-                        <!-- Nav Item - Messages -->
 
 
                         <div class="topbar-divider d-none d-sm-block"></div>
@@ -291,6 +250,7 @@
         </div>
     </div>
 
+
     <!-- Bootstrap core JavaScript-->
     <script src="{{ asset('back/vendor/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('back/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
@@ -310,6 +270,137 @@
     </script>
     @vite(['resources/js/app.js'])
 
+<!-- إضافة الـ CSS و الـ JS الخاصة بـ Select2 -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="{{ asset('back/vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('back/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="{{ asset('back/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
+
+    <!-- Custom scripts for all pages-->
+    {{-- <script src="{{ asset('back/js/sb-admin-2.min.js') }}"></script> --}}
+
+    <!-- Page level plugins -->
+    <script src="{{ asset('back/vendor/chart.js/Chart.min.js') }}"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="{{ asset('back/js/demo/chart-area-demo.js') }}"></script>
+    <script src="{{ asset('back/js/demo/chart-pie-demo.js') }}"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function updateIndexStats() {  // ✅ الاسم صحيح الآن
+            $.ajax({
+                url: "{{ url('/admin/index/stats') }}",  // ✅ تأكد أن هذا المسار صحيح في routes/web.php
+                type: "GET",
+                dataType: "json",
+                success: function(data) {
+                    console.log("Data updated:", data);
+                    $("#monthlyEarnings").text(`$${data.monthlyEarnings}`);
+                    $("#totalSales").text(`$${data.totalSales}`);
+                    $("#totalOrders").text(data.totalOrders);
+                    $("#totalUsers").text(data.totalUsers);
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error fetching index stats:", error);
+                }
+            });
+        }
+
+        // ✅ تحديث البيانات كل 6 ثوانٍ
+        setInterval(updateIndexStats, 20000);
+
+        // ✅ تحديث البيانات عند تحميل الصفحة
+        $(document).ready(function() {
+            updateIndexStats();
+        });
+    </script>
+
+<!-- Scripts for Chart.js and AJAX -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    let earningsChart, revenueChart;
+
+    function loadChartData() {
+        $.ajax({
+            url: "{{ url('/admin/chart-data') }}",
+            type: "GET",
+            dataType: "json",
+            success: function(data) {
+                console.log("Data Loaded:", data);
+
+                // تحديث مخطط الأرباح الشهرية (Area Chart)
+                let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                let earningsData = new Array(12).fill(0);
+
+                Object.keys(data.earnings).forEach(month => {
+                    earningsData[month - 1] = data.earnings[month]; // ضبط القيم حسب الأشهر
+                });
+
+                if (earningsChart) earningsChart.destroy(); // حذف الرسم القديم لمنع التكرار
+
+                let ctx1 = document.getElementById('myAreaChart').getContext('2d');
+                earningsChart = new Chart(ctx1, {
+                    type: 'line',
+                    data: {
+                        labels: months,
+                        datasets: [{
+                            label: 'Earnings ($)',
+                            data: earningsData,
+                            backgroundColor: 'rgba(78, 115, 223, 0.1)',
+                            borderColor: 'rgba(78, 115, 223, 1)',
+                            borderWidth: 2,
+                            pointRadius: 3,
+                            pointBackgroundColor: 'rgba(78, 115, 223, 1)',
+                            pointBorderColor: 'rgba(255, 255, 255, 0.8)'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+
+                // تحديث مخطط مصادر الإيرادات (Pie Chart)
+                if (revenueChart) revenueChart.destroy(); // حذف الرسم القديم لمنع التكرار
+
+                let ctx2 = document.getElementById('myPieChart').getContext('2d');
+                revenueChart = new Chart(ctx2, {
+                    type: 'doughnut',
+                    data: {
+                        labels: Object.keys(data.revenueSources),
+                        datasets: [{
+                            data: Object.values(data.revenueSources),
+                            backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
+                            hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf']
+                        }]
+                    }
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error("Error loading chart data:", error);
+            }
+        });
+    }
+
+    // تحميل البيانات عند تحميل الصفحة
+    $(document).ready(function() {
+        loadChartData();
+
+        // تحديث البيانات كل 10 ثوانٍ
+        setInterval(loadChartData, 10000);
+    });
+</script>
 </body>
 
 </html>

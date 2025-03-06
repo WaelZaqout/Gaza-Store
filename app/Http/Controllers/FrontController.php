@@ -20,20 +20,21 @@ class FrontController extends Controller
      function index()
     {
         $products = Product::latest('id')->paginate(4);
-
         $categories = Category::all();
+        $carts = Cart::all();
         $silders = Silder::all();
 
-        return view('front.index' ,compact('categories','products','silders'));
+        return view('front.index' ,compact('categories','products','silders','carts'));
     }
 
 
      public function products()
         {
             $categories = Category::all();
+            $carts = Cart::all();
             $products = Product::latest('id')->paginate(4);
 
-            return view('front.products', compact('categories', 'products'));
+            return view('front.products', compact('categories', 'products','carts'));
         }
 
 
@@ -74,7 +75,7 @@ class FrontController extends Controller
         }
 
 
-        public function getProduct($id)
+        public function getProduct( $id)
         {
             $product = Product::with('image', 'gallery')->findOrFail($id);
 
@@ -96,27 +97,32 @@ class FrontController extends Controller
 
 
 
-        function shoping(Request $request)
-        {
-            $cart = Cart::where('user_id', auth()->id())->get();  // استرجاع سلة المستخدم
-            $products = Product::all();
-            $categories = Category::all();
-
-            return view('front.shoping',compact('categories','products','cart'));
-        }
-
         public function favorites()
         {
             $favorites = Favorite::where('user_id', auth()->id())->with('product')->get();
             $products = Product::all();
             $categories = Category::all();
-            return view('front.favorites', compact('favorites','categories','products'));
+            return view('front.favorites', compact('favorites','categories','products','carts'));
+        }
+        public function carts()
+        {
+            $carts = Cart::where('user_id', auth()->id())->with('product')->get();
+            $products = Product::all();
+            $categories = Category::all();
+            return view('front.carts', compact('carts','categories','products'));
+        }
+        public function checkout()
+        {
+
+            $carts = Cart::where('user_id', auth()->id())->with('product')->get();
+            $products = Product::all();
+            $categories = Category::all();
+            return view('front.carts', compact('carts','categories','products'));
         }
 
 
         public function search(Request $request)
         {
-
 
                 $query = $request->input('query');
 
@@ -135,33 +141,37 @@ class FrontController extends Controller
 
         public function blog()
         {
+            $carts = Cart::where('user_id', auth()->id())->with('product')->get();
             $categories = Category::all();
             $products = Product::latest('id')->paginate(4);
 
-            return view('front.blog', compact('categories', 'products'));
+            return view('front.blog', compact('carts','categories', 'products'));
         }
 
         public function about()
         {
+            $carts = Cart::where('user_id', auth()->id())->with('product')->get();
             $categories = Category::all();
             $products = Product::latest('id')->paginate(4);
 
-            return view('front.about', compact('categories', 'products'));
+            return view('front.about', compact('carts','categories', 'products'));
         }
         public function contact()
         {
+            $carts = Cart::where('user_id', auth()->id())->with('product')->get();
             $categories = Category::all();
             $products = Product::latest('id')->paginate(4);
 
-            return view('front.contact', compact('categories', 'products'));
+            return view('front.contact', compact('carts','categories', 'products'));
         }
 
         public function footer()
         {
+            $carts = Cart::where('user_id', auth()->id())->with('product')->get();
             $categories = Category::all();
             $products = Product::latest('id')->paginate(4);
 
-            return view('front.master', compact('categories', 'products'));
+            return view('front.master', compact('categories', 'products','carts'));
         }
 
 

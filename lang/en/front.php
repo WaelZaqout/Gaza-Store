@@ -27,6 +27,10 @@ return [
     'No' => 'No. of Orders',
     'Size' => 'Size ',
     'Color' => 'Color ',
+    'profile' => 'Profile  ',
+    'login' => ' Login',
+    'logout' => 'LogOut',
+    'sign_up' => 'SignUp ',
 
 
 ];

@@ -3346,9 +3346,8 @@ input.num-product::-webkit-inner-spin-button {
 
 .main-image img {
     width: 100%;
-    max-width: 500px;
+    max-width: 400px;
 }
-
 .thumbnails {
     display: flex;
     flex-direction: column;
@@ -3358,6 +3357,46 @@ input.num-product::-webkit-inner-spin-button {
     top: 50%;
     transform: translateY(-50%);
 }
+
+.thumbnail img {
+    width: 100px;
+    height: auto;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.thumbnail img:hover {
+    transform: scale(1.1);
+}
+
+/* التصميم عند الشاشات الصغيرة */
+@media (max-width: 1024px) {
+    .thumbnails {
+        left: -80px;
+    }
+
+    .thumbnail img {
+        width: 70px;
+    }
+}
+
+@media (max-width: 768px) {
+    .thumbnails {
+        position: static;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 5px;
+        transform: none;
+        margin-top: 15px;
+    }
+
+    .thumbnail img {
+        width: 60px;
+    }
+}
+
 
 .thumbnail img {
     width: 100px;
@@ -3413,8 +3452,7 @@ input.num-product::-webkit-inner-spin-button {
     color: #717fe0;
     /* لون السهم */
 }
-
-<style>.quantity-content {
+.quantity-content {
     display: flex;
     align-items: center;
     justify-content: space-between;

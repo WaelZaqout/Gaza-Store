@@ -51,6 +51,7 @@ class ProductController extends Controller
         ]);
         // $data=$request->except('_token','image','gallery');
 
+
         $product=Product::create([
             'name'=> '',
             'description'=> '',
@@ -121,7 +122,7 @@ class ProductController extends Controller
 
         $product->update([
             'name'=> '',
-            'description'=> '',
+            'descrizzzzzzption'=> '',
             'price'=>$request->price,
             'quantity'=>$request->quantity,
             'category_id'=>$request->category_id,
@@ -187,18 +188,18 @@ class ProductController extends Controller
             return Image::destroy($id);
 
         }
-            public function getProducts(Request $request){
+            // public function getProducts(Request $request){
 
-                $categoryId = $request->category_id;
+            //     $categoryId = $request->category_id;
 
-                // جلب المنتجات بناءً على القسم المحدد
-                if ($categoryId == 'all') {
-                    $products = Product::latest()->limit(12)->get();
-                } else {
-                    $products = Product::where('category_id', $categoryId)->latest()->limit(12)->get();
-                }
+            //     // جلب المنتجات بناءً على القسم المحدد
+            //     if ($categoryId == 'all') {
+            //         $products = Product::latest()->limit(12)->get();
+            //     } else {
+            //         $products = Product::where('category_id', $categoryId)->latest()->limit(12)->get();
+            //     }
 
-                return view('front.partials.products', compact('products'));
-            }
+            //     return view('front.partials.products', compact('products'));
+            // }
 
 }

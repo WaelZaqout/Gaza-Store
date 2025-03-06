@@ -42,6 +42,7 @@ class Product extends Model
 
     }
 
+    
     function getImgPathAttribute(){
 
         $url='https://via.placeholder.com/100x80';

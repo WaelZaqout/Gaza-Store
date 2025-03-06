@@ -14,7 +14,7 @@
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item">
-            <a class="nav-link" href="">
+            <a class="nav-link" href="{{ route('admin.index') }}">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>{{ __('admin.dash') }}</span></a>
         </li>
@@ -72,32 +72,43 @@
         </li>
         <hr class="sidebar-divider my-0">
 
+
         <!-- Nav Item - Dashboard -->
         <li class="nav-item">
-            <a class="nav-link" href="">
-                <i class="fas fa-fw fa-shopping-cart"></i>
+            <a class="nav-link" href="{{ route('admin.orders.index') }}">
+                <i class="fas fa-fw fa-users"></i>
                 <span>{{ __('admin.order') }}</span></a>
         </li>
 
-
-
         <hr class="sidebar-divider my-0">
+
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item">
-            <a class="nav-link" href="index.html">
-                <i class="fas fa-fw fa-dollar-sign"></i>
-                <span>{{ __('admin.payments') }}</span></a>
-        </li>
-        <hr class="sidebar-divider my-0">
-
-        <!-- Nav Item - Dashboard -->
-        <li class="nav-item">
-            <a class="nav-link" href="index.html">
+            <a class="nav-link" href="{{ route('admin.customers.index') }}">
                 <i class="fas fa-fw fa-users"></i>
                 <span>{{ __('admin.coustomer') }}</span></a>
         </li>
+        <hr class="sidebar-divider my-0">
 
+
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="{{ route('admin.invoices.index') }}">
+               <i class="fas fa-closed-captioning"></i>
+                <span>{{ __('admin.invoices') }}</span>
+            </a>
+        </li>
+
+
+        <hr class="sidebar-divider my-0">
+
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item">
+            <a class="nav-link" href="">
+                <i class="fas fa-fw fa-dollar-sign"></i>
+                <span>{{ __('admin.payments') }}</span></a>
+        </li>
 
         <hr class="sidebar-divider my-0">
 

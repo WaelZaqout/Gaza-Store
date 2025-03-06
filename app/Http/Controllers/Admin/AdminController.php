@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Controller; 
 use App\Models\notifications;
+use App\Models\order;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -11,10 +13,17 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
-    function index(){
-        return view('admin.index');
+    public function index()
+    {
+        $monthlyEarnings = order::whereMonth('created_at', date('m'))->sum('total_price');
+        $totalSales = order::sum('total_price');
+        $totalOrders = order::count();
+        $totalUsers = User::count();
+
+        return view('admin.index', compact('monthlyEarnings', 'totalSales', 'totalOrders', 'totalUsers'));
     }
-    
+
+
     function profile(){
 
         $admin =Auth::user();
@@ -77,4 +86,40 @@ class AdminController extends Controller
 
 
     }
+            public function getIndexStats()
+        {
+            $monthlyEarnings = Order::whereMonth('created_at', date('m'))->sum('total_price');
+            $totalSales = Order::sum('total_price');
+            $totalOrders = Order::count();
+            $totalUsers = User::count();
+
+            return response()->json([
+                'monthlyEarnings' => number_format($monthlyEarnings, 2),
+                'totalSales' => number_format($totalSales, 2),
+                'totalOrders' => number_format($totalOrders),
+                'totalUsers' => number_format($totalUsers),
+            ]);
+        }
+        public function getChartData()
+        {
+            // جلب الأرباح الشهرية
+            $earnings = Order::selectRaw('MONTH(created_at) as month, SUM(total_price) as total')
+                ->groupBy('month')
+                ->orderBy('month')
+                ->pluck('total', 'month');
+
+            // جلب مصادر الإيرادات
+            $revenueSources = [
+                'Direct' => Order::where('source', 'direct')->count(),
+                'Social' => Order::where('source', 'social')->count(),
+                'Referral' => Order::where('source', 'referral')->count(),
+            ];
+
+            return response()->json([
+                'earnings' => $earnings,
+                'revenueSources' => $revenueSources
+            ]);
+        }
+
+
 }

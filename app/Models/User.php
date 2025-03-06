@@ -24,6 +24,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'password',
         'type',
+        'address',
+        'phone'
     ];
 
     /**
@@ -81,5 +83,6 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Favorite::class); // أو belongsToMany حسب التصميم
     }
+
 
 }

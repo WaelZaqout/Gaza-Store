@@ -1,55 +1,4 @@
-{{-- <x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
-        @csrf
 
-        <!-- Name -->
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
-        </div>
-
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
-
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
-            </a>
-
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout> --}}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -93,7 +42,7 @@
             border-radius: 10px;
             backdrop-filter: blur(5px);
             color: #fff;
-            height: 500px;
+            height: 550px;
             width: 340px;
             padding: 20px;
         }
@@ -188,6 +137,17 @@
                 <input type="email" name="email" id="email-input" required placeholder="Email">
                 <img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" alt="email-image" width="25px">
             </div>
+
+            <div class="input-box phone" style="margin-top: 15px;" >
+                <input type="text" name="phone" id="phone-input" required placeholder="Phone Number">
+                <img src="https://cdn-icons-png.flaticon.com/512/159/159832.png" alt="phone-image" width="25px">
+            </div>
+
+            <div class="input-box address"  style="margin-top: 15px;" >
+                <input type="text" name="address" id="address-input" required placeholder="Address">
+                <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png"alt="address-image" width="25px">
+            </div>
+
             <div class="input-box password">
                 <input type="password" name="password" id="password-input" required placeholder="Password">
                 <img src="https://cdn-icons-png.flaticon.com/512/2489/2489659.png" alt="lock-image" width="22px">

@@ -11,7 +11,7 @@ class order_details extends Model
 
     protected $guarded = [];
 
-    function users(){
+    function user(){
         return $this->belongsTo(User::class)->withDefault();
 
     }

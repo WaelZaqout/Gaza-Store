@@ -1,0 +1,764 @@
+/* البحث */
+
+
+.search-container {
+    display: flex;
+    justify-content: center; /* توسيط البحث */
+    margin: 20px 0;
+}
+
+/* تصميم الفورم ليكون مرنًا */
+.search-form {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden; /* لضبط الحواف وعدم خروج العناصر */
+    max-width: 400px; /* تحديد عرض مناسب */
+    width: 100%;
+}
+
+/* تصميم حقل البحث */
+.search-input {
+    flex: 1; /* يجعل الإدخال يتمدد ليأخذ المساحة المتاحة */
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    outline: none;
+}
+
+/* تصميم زر البحث */
+.search-button {
+    padding: 10px 15px;
+    font-size: 16px;
+    background-color: #4b49ac;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+}
+
+.search-button:hover {
+    background-color: #3a379c;
+}
+
+    /* General Button Styling */
+    .btn-hover-effect:hover {
+        background-color: #007BFF; /* Light blue */
+        color: #fff; /* White text */
+        transform: scale(1.1);
+        transition: all 0.3s ease;
+    }
+
+    /* Search Input Focus Effect */
+    .search-input:focus {
+        border: 2px solid #4CAF50; /* Green border */
+        outline: none;
+        transition: border-color 0.3s ease;
+    }
+
+    /* Fade-in Effect for Product Items */
+    .product-item {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    .product-item.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Smooth Pagination */
+    .page-links a {
+        margin: 0 5px;
+        padding: 5px 10px;
+        border-radius: 5px;
+        color: #007BFF;
+        text-decoration: none;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .page-links a:hover {
+        background-color: #007BFF;
+        color: #fff;
+    }
+    /* Slider General Styling */
+        .section-slide {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .item-slick1 {
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .layer-slick1 {
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .flex-c-m {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+
+
+
+        /* Button Customization */
+        .hov-btn1 {
+            border-radius: 25px;
+            padding: 10px 25px;
+            font-weight: bold;
+        }
+        /* إضافة هذا الكود في قسم الـ CSS */
+
+
+/* المنتجات */
+.products-container {
+display: flex;
+flex-wrap: wrap;
+gap: 20px;
+justify-content: center;
+margin-top: 30px;
+}
+
+.product-card {
+width: 250px;
+border: 1px solid #ddd;
+border-radius: 10px;
+background-color: #fff;
+box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+transition: all 0.3s ease;
+}
+
+.product-card:hover {
+box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+transform: translateY(-5px);
+}
+
+/* تحسين طريقة عرض الصور */
+.product-image img {
+width: 100%;
+height: 300px;
+object-fit: cover;
+display: block;
+border-radius: 5px;
+    }
+/* تعديل زر المفضلة ليكون على اليمين */
+/* تصميم حاوية المنتج */
+.product-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 250px;
+    padding: 10px;
+}
+
+/* تنسيق المعلومات تحت الصورة */
+.product-info {
+    display: flex;
+    justify-content: space-between; /* يجعل الزر في اليمين */
+    align-items: center;
+    width: 100%;
+    padding: 5px 0;
+}
+
+/* تصميم زر المفضلة *//* جعل النص وزر المفضلة في سطر واحد */
+.block2-txt-child2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+/* تنسيق زر المفضلة */
+.favorite-button {
+    background: none;
+    border: none;
+    font-size: 25px;
+    color: #888;
+    cursor: pointer;
+    transition: color 0.3s ease-in-out;
+    margin-left: 10px; /* إبعاد الزر عن السعر قليلاً */
+}
+
+/* تغيير لون الزر عند التمرير */
+.favorite-button:hover {
+    color: red;
+}
+
+/* تغيير لون الزر عند التفعيل */
+.favorite-button.active {
+    color: red;
+}
+/* تحسين شكل مربع إدخال الكمية */
+/* جعل الحاوية الرئيسية عمودية لتنسيق المحتوى *//* ✅ تحسين صندوق التحكم في الكمية */
+.quantity-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 12px; /* تقليل المسافات قليلاً */
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+/* ✅ تنسيق عنوان الكمية */
+.quantity-content h6 {
+    font-size: 17px;
+    font-weight: bold;
+    color: #444;
+}
+
+/* ✅ تحسين تخطيط أزرار التحكم في الكمية */
+.quantity.buttons_added {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* ✅ تحسين أزرار + و - */
+.quantity.buttons_added input[type="button"] {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    width: 38px;
+    height: 38px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 6px;
+    transition: 0.3s ease;
+    cursor: pointer;
+}
+
+/* تأثير عند تمرير الماوس */
+.quantity.buttons_added input[type="button"]:hover {
+    background-color: #0056b3;
+}
+
+/* ✅ تحسين حقل إدخال الكمية */
+.input-text.qty {
+    width: 45px;
+    height: 38px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    border: 2px solid #007bff;
+    border-radius: 6px;
+}
+
+/* ✅ تنسيق زر "أضف إلى السلة" */
+.btn-primary {
+    background-color: #28a745;
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    padding: 12px 18px;
+    border-radius: 6px;
+    width: 100%;
+    transition: 0.3s ease;
+    border: none;
+}
+
+/* تأثير عند تمرير الماوس */
+.btn-primary:hover {
+    background-color: #218838;
+}
+
+/* تحسين الزر إذا كان غير مفعل */
+.add-to-cart.disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+    border-radius: 6px;
+    font-size: 17px;
+    padding: 12px 18px;
+    width: 100%;
+}
+
+/* ✅ تحسين زر المعاينة السريعة */
+.quick-view {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 15px;
+    text-align: center;
+    text-decoration: none;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+/* جعله يظهر عند تمرير الفأرة */
+.product-image:hover .quick-view {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-5px);
+}
+
+/* ✅ تحسين عرض المعلومات */
+.product-info {
+    padding: 15px;
+    text-align: center;
+}
+
+.product-name {
+    font-size: 18px;
+    color: #333;
+    margin: 8px 0;
+    font-weight: bold;
+}
+
+.product-price {
+    font-size: 16px;
+    color: #5a67d8;
+    font-weight: bold;
+}
+
+/* ✅ تحسين عرض الصور */
+.block2-pic img {
+    width: 100%;
+    height: 450px; /* تقليل الارتفاع ليكون أكثر تناسباً */
+    object-fit: cover;
+    border-radius: 6px;
+    display: block;
+    transition: 0.3s ease-in-out;
+}
+
+/* ✅ تأثير التكبير عند المرور على الصورة */
+.block2-pic img:hover {
+    transform: scale(1.05);
+}
+
+/* ✅ تحسين ترتيب الكروت */
+#row1 {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px; /* تقليل المسافة قليلاً */
+}
+
+/* ✅ جعل كل كارت يأخذ حجمًا موحدًا */
+.isotope-item {
+    flex: 1 1 220px;
+    max-width: 340px;
+    transition: 0.3s ease-in-out;
+}
+
+/* ✅ إضافة تأثير النبض عند النقر */
+.pulse {
+    animation: pulse-animation 0.3s ease-in-out;
+}
+
+@keyframes pulse-animation {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+/* ✅ تحسين عام لتفاصيل المنتج */
+.product-details {
+    padding: 20px 30px;
+}
+
+.product-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.product-price {
+    font-size: 22px;
+    font-weight: bold;
+    color: #28a745;
+    margin-bottom: 10px;
+}
+
+.product-description {
+    font-size: 16px;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+/* ✅ تحسين خيارات المنتج */
+.product-options {
+    margin-top: 20px;
+}
+
+.option-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.option-label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #444;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100px;
+}
+
+.option-label i {
+    font-size: 18px;
+    color: #007bff;
+}
+
+.option-select {
+    flex: 1;
+    position: relative;
+}
+
+.option-select select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #007bff;
+    border-radius: 6px;
+    font-size: 16px;
+    background-color: #fff;
+    transition: 0.3s ease;
+}
+
+/* تأثير عند التركيز */
+.option-select select:focus {
+    border-color: #0056b3;
+    box-shadow: 0px 0px 5px rgba(0, 91, 187, 0.5);
+}
+
+/* ✅ تحسين زر الإضافة إلى السلة */
+.add-to-cart-btn {
+    background-color: #28a745;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 12px 20px;
+    border-radius: 6px;
+    width: 100%;
+    transition: 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.add-to-cart-btn:hover {
+    background-color: #218838;
+}
+
+/* تحسين صندوق التحكم في الكمية */
+.quantity-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 12px;
+    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+.quantity-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    width: 38px;
+    height: 38px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 6px;
+    transition: 0.3s ease;
+    cursor: pointer;
+}
+
+.quantity-btn:hover {
+    background-color: #0056b3;
+}
+
+.input-quantity {
+    width: 50px;
+    height: 38px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    border: 2px solid #007bff;
+    border-radius: 6px;
+}
+
+      /* تخصيص الأيقونات */
+      .wrap-icon-header .icon-header-item {
+        font-size: 18px;
+        color: #333;
+        position: relative;
+        transition: color 0.3s ease, transform 0.3s;
+    }
+
+    .wrap-icon-header .icon-header-item:hover {
+        color: #007bff;
+        transform: scale(1.2);
+    }
+
+    /* تنسيق الفقاعة فوق الأيقونة */
+    .icon-header-noti::after {
+        content: attr(data-notify);
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        background-color: #ff3e3e;
+        color: #fff;
+        font-size: 12px;
+        width: 18px;
+        height: 18px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    /* زر الفقاعة */
+    #favorites-count {
+        position: absolute;
+        top: -5px;
+        right: -10px;
+        background-color: red;
+        color: white;
+        font-size: 12px;
+        border-radius: 50%;
+        padding: 2px 6px;
+        min-width: 18px;
+        text-align: center;
+        display: inline-block;
+    }
+
+    #favorites-count:empty {
+        display: none;
+    }
+
+    /* قائمة اللغات المنسدلة */
+    .dropdown-menu {
+        border-radius: 8px;
+        border: none;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        animation: fadeIn 0.3s ease;
+    }
+
+    .dropdown-toggle::after {
+        display: none;
+    }
+
+    .dropdown-item {
+        font-size: 14px;
+        padding: 10px 15px;
+        color: #333;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .dropdown-item:hover {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+    .dropdown-item i {
+        color: #007bff;
+        margin-right: 8px;
+        transition: color 0.3s ease;
+    }
+
+    .dropdown-item:hover i {
+        color: #fff;
+    }
+
+    /* تأثيرات عامة */
+    button:hover {
+        background-color: #4CAF50;
+        color: white;
+        transform: scale(1.1);
+        transition: all 0.3s ease-in-out;
+    }
+
+    img:hover {
+        transform: scale(1.05);
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .fade-in {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    .fade-in.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .sticky {
+        background-color: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    /* تنسيق الهيدر */
+    header {
+        background-color: rgba(36, 40, 46, 0.24);
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 15px 0;
+        position: sticky;
+        top: 0;
+        z-index: 999;
+    }
+
+    .menu-desktop .main-menu > li {
+        display: inline-block;
+        margin: 0 15px;
+        position: relative;
+    }
+
+    .menu-desktop .main-menu > li > a {
+        font-size: 14px;
+        text-transform: uppercase;
+        color: #333;
+        font-weight: bold;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .menu-desktop .main-menu > li > a:hover {
+        color: #334a73;
+    }
+
+    .menu-desktop .main-menu > li.active-menu > a {
+        color: #007BFF;
+    }
+
+    .custom-navbar {
+        background: rgba(255, 255, 255, 0.9);
+        padding: 10px 0;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease-in-out;
+    }
+
+    .custom-navbar .navbar-brand .logo {
+        width: 150px;
+    }
+
+    .navbar-nav .nav-item .nav-link {
+        font-weight: 600;
+        color: #333;
+        padding: 10px 15px;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .navbar-nav .nav-item .nav-link:hover {
+        color: #007bff;
+        transform: scale(1.05);
+    }
+
+    .hot-label::after {
+        content: "🔥";
+        font-size: 14px;
+        margin-left: 5px;
+        color: red;
+    }
+
+    .icons {
+        display: flex;
+        align-items: center;
+    }
+
+    .icon-header-item {
+        font-size: 20px;
+        margin-right: 15px;
+        color: #555;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .icon-header-item:hover {
+        color: #007bff;
+        transform: scale(1.1);
+    }
+
+    .btn-outline-primary, .btn-primary {
+        margin-left: 10px;
+        border-radius: 20px;
+        font-weight: bold;
+    }
+
+    @media (max-width: 992px) {
+        .icons {
+            flex-direction: column;
+            text-align: center;
+            margin-top: 10px;
+        }
+    }
+    .header-buttons {
+    display: flex;
+    align-items: center;
+    }
+
+    .user-dropdown {
+        position: relative;
+    }
+
+    .user-name-btn {
+        background: none;
+        border: none;
+        font-size: 16px;
+        font-weight: bold;
+        color: #333;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+    }
+
+    .user-name-btn i {
+        margin-left: 5px;
+    }
+
+    .dropdown-menu {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        display: none;
+        width: 150px;
+        list-style: none;
+        padding: 10px;
+    }
+
+    .user-dropdown:hover .dropdown-menu {
+        display: block;
+    }
+
+    .dropdown-menu li {
+        padding: 5px 10px;
+    }
+
+    .dropdown-menu li a {
+        text-decoration: none;
+        color: #333;
+        display: block;
+    }
+
+    .dropdown-menu li a:hover {
+        background: #f5f5f5;
+    }

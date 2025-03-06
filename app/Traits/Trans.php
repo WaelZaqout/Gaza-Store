@@ -6,6 +6,7 @@ namespace App\Traits;
     function getTransNameAttribute(){
         return json_decode($this->name,true)[app()->getLocale()]??'';
     }
+
     function getNameEnAttribute(){
         return json_decode($this->name,true)['en']??'';
     }
@@ -17,11 +18,13 @@ namespace App\Traits;
         return json_decode($this->description,true)[app()->getLocale()]??'';
     }
     function getDescriptionEnAttribute(){
-        return json_decode($this->name,true)['en']??'';
+        return json_decode($this->description,true)['en']??'';
     }
+
     function getDescriptionArAttribute(){
-        return json_decode($this->name,true)['ar']??'';
+        return json_decode($this->description,true)['ar']??'';
     }
+
     // Mutators
         function setNameAttribute() {
             $name = [

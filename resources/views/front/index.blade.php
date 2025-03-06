@@ -3,31 +3,33 @@
 
 @section('content')
 
-    @include('front.partials.carts')
 
+@include('front.partials.carts')
 
-    <!-- Slider -->
-    <section class="section-slide">
-        <div class="wrap-slick1">
-            <div class="slick1">
-                @foreach ( $silders as $silder )
+<!-- Slider -->
+<section class="section-slide">
+    <div class="wrap-slick1">
+        <div class="slick1">
+            @foreach ($silders as $silder)
                 <div class="item-slick1" style="background-image: url({{ asset('images/' . $silder->image->path) }});">
                     <div class="container h-full">
                         <div class="flex-col-l-m h-full p-t-100 p-b-30 respon5">
-                            <div class="layer-slick1 animated visible-false" data-appear="fadeInDown" data-delay="0">
+                            <!-- Title Animation -->
+                            <div class="layer-slick1 animated animate__animated animate__fadeInDown" data-delay="0">
                                 <span class="ltext-101 cl2 respon2">
                                     {{ $silder->trans_name }}
                                 </span>
                             </div>
 
-                            <div class="layer-slick1 animated visible-false" data-appear="fadeInUp" data-delay="800">
+                            <!-- Description Animation -->
+                            <div class="layer-slick1 animated animate__animated animate__fadeInUp" data-delay="800">
                                 <h2 class="ltext-201 cl2 p-t-19 p-b-43 respon1">
                                     {{ $silder->trans_description }}
-
                                 </h2>
                             </div>
 
-                            <div class="layer-slick1 animated visible-false" data-appear="zoomIn" data-delay="1600">
+                            <!-- Button Animation -->
+                            <div class="layer-slick1 animated animate__animated animate__zoomIn" data-delay="1600">
                                 <a href="{{ route('front.shoping') }}"
                                     class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
                                     {{ __('front.shop now') }}
@@ -36,11 +38,10 @@
                         </div>
                     </div>
                 </div>
-                @endforeach
-            </div>
+            @endforeach
         </div>
-    </section>
-
+    </div>
+</section>
 
     <!-- Banner -->
     <div class="sec-banner bg0 p-t-95 p-b-55">
@@ -149,7 +150,7 @@
                         <input type="text" id="query" name="query" placeholder="  {{ __('front.search pro') }} ..."
                             class="search-input">
 
-                                    <button type="submit" class="search-button">  {{ __('front.search') }}</button>
+                            <button type="submit" class="search-button">  {{ __('front.search') }}</button>
                     </form>
                 </div>
             </div>
@@ -222,6 +223,33 @@
         });
     </script>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Add 'visible' class to products when they appear in the viewport
+        const products = document.querySelectorAll('.product-item');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.2 });
+
+        products.forEach(product => observer.observe(product));
+
+        // Smooth scrolling for pagination links
+        document.querySelectorAll('.page-links a').forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    });
+
+</script>
 
 @endsection
 

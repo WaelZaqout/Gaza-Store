@@ -14,11 +14,13 @@ class IsAdmin
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next)
     {
-        if (Auth::user()->type=='customer'){
-            return redirect('/admin');
-           }
-           return $next($request);
-          }
-}
+        if (Auth::check() && Auth::user()->type === 'admin') {
+            return $next($request);
+        }
+
+        return redirect('/login')->with('error', 'يجب تسجيل الدخول كمسؤول للوصول إلى هذه الصفحة.');
+    }
+
+    }

@@ -2,7 +2,6 @@
 @section('content')
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-4 text-gray-800">All Silders</h1>
 
 
     @if (session()->has('msg'))
@@ -15,7 +14,12 @@
           </button>
         </div>
     @endif
-
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h3 mb-4 text-gray-800">All Silders</h1>
+        <a href="{{ route('admin.categories.create') }}" class="btn btn-success">
+            <i class="fas fa-plus"></i> Add New Silder
+        </a>
+    </div>
 
     <table class="table table-bordered table-hover">
      <tr class="bg-dark text-white">

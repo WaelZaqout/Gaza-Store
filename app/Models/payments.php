@@ -21,4 +21,9 @@ class payments extends Model
 
     }
 
+     // علاقة مع الفواتير
+     public function invoices()
+     {
+         return $this->hasMany(Invoice::class);
+     }
 }

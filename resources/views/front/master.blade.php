@@ -36,6 +36,9 @@
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/daterangepicker/daterangepicker.css') }}">
     <!--===============================================================================================-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <!--===============================================================================================-->
+
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/slick/slick.css') }}">
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/MagnificPopup/magnific-popup.css') }}">
@@ -44,6 +47,7 @@
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/util.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/main.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/styles.css') }}">
 
         <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -55,54 +59,74 @@
     @yield('css')
     @if (App::getLocale() == 'ar')
     <style>
-        .topbar .dropdown .dropdown-menu {
-            right: -60%;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
 
         body {
             direction: rtl;
-            text-align: right;
+            text-align: center;
+            font-family: 'Tajawal', sans-serif; /* خط عصري وجميل */
+        }
+
+        /* تحسين تنسيق العناوين */
+        h1, h2, h3, h4, h5, h6 {
+            text-align: center;
+            font-weight: 900; /* جعل الخط سميك جداً */
+            color: #222; /* لون أكثر وضوحًا */
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* إضافة ظل خفيف */
+        }
+
+        p {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+            text-align: center;
+            line-height: 1.8; /* تحسين التباعد */
+        }
+
+        .topbar .dropdown .dropdown-menu {
+            right: 0;
+            left: auto;
+            text-align: center;
         }
 
         .sidebar {
             padding: 0;
+            text-align: center;
         }
 
         .sidebar .nav-item .nav-link {
-            text-align: right;
-            margin-right: 52px;
+            text-align: center;
+            margin-right: 0;
+            font-weight: bold;
+            color: #000; /* لون أكثر وضوحًا */
         }
 
         .sidebar .nav-item .nav-link[data-toggle=collapse]::after {
-            float: left;
+            float: none;
             transform: rotate(180deg);
         }
 
         .limiter-menu-desktop {
-            margin-right: 52px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
         }
 
         .main-menu {
-            padding-right: 24px;
+            padding: 0;
+            text-align: center;
         }
 
         .logo {
-            margin-left: 160px;
+            margin: 0 auto;
+            display: block;
         }
 
-        .limiter-menu-desktop {
-            margin-right: 200px;
-        }
-
-        .ml-auto,
-        .mx-auto {
-            margin-left: unset !important;
+        .ml-auto, .mx-auto {
+            margin-left: auto !important;
             margin-right: auto !important;
         }
-
-        /* عكس الصور الخلفية فقط */
-       /* عكس الصور الخلفية فقط */
-            .item-slick1::before {
+        .item-slick1::before {
                 content: "";
                 display: block;
                 position: absolute;
@@ -120,295 +144,157 @@
             .favorite-button{
                 padding-right: 230px;
             }
-            .thumbnails{
-                right: -110px;
+
+            .thumbnails {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            position: absolute;
+            right: -110px; /* عكس الاتجاه */
+            left: auto;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .thumbnail img {
+            width: 100px;
+            height: auto;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .thumbnail img:hover {
+            transform: scale(1.1);
+        }
+
+        /* التصميم عند الشاشات الصغيرة */
+        @media (max-width: 1024px) {
+            .thumbnails {
+                right: -80px; /* تقليل المسافة عند الشاشات الصغيرة */
             }
-    </style>
-@endif
 
-    <style>
-                /* تخصيص الأيقونات */
-        .wrap-icon-header .icon-header-item {
-            font-size: 18px;
-            color: #333;
-            position: relative;
-            transition: color 0.3s ease;
+            .thumbnail img {
+                width: 70px;
+            }
         }
 
-        .wrap-icon-header .icon-header-item:hover {
-            color: #007bff; /* لون عند التمرير */
-        }
+        @media (max-width: 768px) {
+            .thumbnails {
+                position: static;
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                gap: 5px;
+                transform: none;
+                margin-top: 15px;
+            }
 
-        /* تنسيق الفقاعة فوق الأيقونة */
-        .icon-header-noti {
-            position: relative;
+            .thumbnail img {
+                width: 60px;
+            }
         }
-
-        .icon-header-noti::after {
-            content: attr(data-notify);
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            background-color: #ff3e3e;
-            color: #fff;
-            font-size: 12px;
-            width: 18px;
-            height: 18px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 50%;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-        }
-
-        /* قائمة اللغات المنسدلة */
-        .dropdown-menu {
-            border-radius: 8px;
-            border: none;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .dropdown-toggle::after{
-            display: none;
-        }
-        .dropdown-item {
-            font-size: 14px;
-            padding: 10px 15px;
-            transition: background-color 0.3s ease;
-        }
-
-        .dropdown-item:hover {
-            background-color: #f8f9fa; /* لون الخلفية عند التمرير */
-            color: #007bff; /* لون النص عند التمرير */
-        }
-
-                /* تنسيق الرابط في القائمة */
-        .dropdown-item {
-            font-size: 14px;
-            padding: 10px 15px;
-            color: #333;
-            border-radius: 6px;
-            transition: background-color 0.3s ease, color 0.3s ease;
-            display: flex;
-            align-items: center;
-        }
-
-        /* تأثير عند التمرير على العنصر */
-        .dropdown-item:hover {
-            background-color: #007bff; /* خلفية باللون الأزرق */
-            color: #fff; /* النص يصبح أبيض */
-        }
-
-        /* أيقونات بجانب أسماء اللغات */
-        .dropdown-item i {
-            color: #007bff; /* لون الأيقونة */
-            margin-right: 8px;
-            transition: color 0.3s ease;
-        }
-
-        .dropdown-item:hover i {
-            color: #fff; /* تغيير لون الأيقونة عند التمرير */
-        }
-
-        /* القائمة نفسها */
-        .dropdown-menu {
-            border-radius: 8px;
-            border: none;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* ظل خفيف */
-            animation: fadeIn 0.3s ease;
-                }
-                /* العنصر الأساسي للأيقونة */
-            #favorites-count {
-            position: absolute;
-            top: -5px;
-            right: -10px;
-            background-color: red;
-            color: white;
-            font-size: 12px;
-            border-radius: 50%;
-            padding: 2px 6px;
-            display: inline-block;
-            min-width: 18px;
-            text-align: center;
-        }
-
-        #favorites-count:empty {
-            display: none;
-        }
-
 
     </style>
+    @endif
+
 </head>
 
 <body class="animsition">
 
-    <!-- Header -->
-    <header>
-        <!-- Header desktop -->
-        <div class="container-menu-desktop">
-            <!-- Topbar -->
-            <nav class="limiter-menu-desktop container">
-
-                <!-- Logo desktop -->
-                <a href="#" class="logo">
-                    <img src="{{ asset('assets/images/icons/logo-gaza.png') }}" alt="IMG-LOGO">
+    <header class="custom-navbar">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg">
+                <!-- Logo -->
+                <a class="navbar-brand" href="{{ route('front.index') }}">
+                    <img src="{{ asset('assets/images/icons/logo-gaza.png') }}" alt="Logo" class="logo">
                 </a>
 
-                <!-- Menu desktop -->
-                <div class="menu-desktop">
-                    <ul class="main-menu">
-                        <li class="active-menu">
-                            <a href="{{ route('front.index') }}"> {{ __('front.home') }}</>
-                        </li>
+                <!-- Navbar Toggler (for mobile) -->
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-                        <li class="label1" data-label1="hot">
-                            <a href="{{ route('front.products') }}"> {{ __('front.shop') }}</a>
+                <!-- Navbar Items -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{{ route('front.index') }}">{{ __('front.home') }}</a>
                         </li>
-
-                        <li>
-                            <a href="{{ route('front.shoping') }}"> {{ __('front.features') }}</a>
+                        <li class="nav-item">
+                            <a class="nav-link hot-label" href="{{ route('front.products') }}">{{ __('front.shop') }}</a>
                         </li>
-
-                        <li >
-                            <a href="{{ route('front.blog') }}">{{ __('front.blog') }}</a>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('front.carts') }}">{{ __('front.features') }}</a>
                         </li>
-
-                        <li>
-                            <a href="{{ route('front.about') }}">{{ __('front.about') }}</a>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('front.blog') }}">{{ __('front.blog') }}</a>
                         </li>
-
-                        <li>
-                            <a href="{{ route('front.contact') }}">{{ __('front.contact') }}</a>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('front.about') }}">{{ __('front.about') }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('front.contact') }}">{{ __('front.contact') }}</a>
                         </li>
                     </ul>
                 </div>
-
-                <!-- Icon header -->
-                <div class="wrap-icon-header flex-w flex-r-m">
-                    <li class="nav-item dropdown no-arrow">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="mr-2 d-none d-lg-inline text-gray-600 small" style="color:#242f2f;">
+                    <!-- Icons Section -->
+                    <div class="icons">
+                        <div class="dropdown">
+                            <a class="nav-link dropdown-toggle lang-dropdown" href="#" id="langDropdown" role="button" data-toggle="dropdown">
                                 <i class="fas fa-globe"></i>
-                                {{ __('admin.langs') }}</span>
-
-                        </a>
-                        <!-- Dropdown - User Information -->
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                            aria-labelledby="userDropdown">
-                            @foreach (LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
-                                <a class="dropdown-item" rel="alternate" hreflang="{{ $localeCode }}"
-                                    href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}">
-                                    {{ $properties['native'] }}
-                                </a>
-                            @endforeach
-
+                            </a>
+                            <div class="dropdown-menu">
+                                @foreach (LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+                                    <a class="dropdown-item" href="{{ LaravelLocalization::getLocalizedURL($localeCode) }}">
+                                        {{ $properties['native'] }}
+                                    </a>
+                                @endforeach
+                            </div>
                         </div>
-                    </li>
 
-                    <div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart"
-                    data-notify="{{ session('cart') ? count(session('cart')) : 0 }}">
-                    <i class="zmdi zmdi-shopping-cart"></i>
-                </div>
+                        <div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart"
+                        data-notify="{{ session('cart') ? count(session('cart')) : 0 }}">
+                        <i class="zmdi zmdi-shopping-cart"></i>
+                    </div>
 
-                <a href="{{ route('front.favorites') }}"
-                class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10">
-                <i class="zmdi zmdi-favorite-outline"></i>
-                <span id="favorites-count" class="icon-header-noti">{{ $favoritesCount ?? 0 }}</span>
-                </a>
+                    <a href="{{ route('front.favorites') }}"
+                    class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10">
+                    <i class="zmdi zmdi-favorite-outline"></i>
+                    <span id="favorites-count" class="icon-header-noti"></span>
+                 </a>
 
-                </div>
+                        <div class="header-buttons">
+                            @if(auth()->check())
+                                <!-- عرض اسم المستخدم عند تسجيل الدخول -->
+                                <div class="user-dropdown">
+                                    <button class="user-name-btn">
+                                        {{ auth()->user()->name }} <i class="zmdi zmdi-chevron-down"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="">{{ __('front.profile') }} </a></li>
+
+                                        <form action="{{ route('logout') }}" method="post">
+                                            @csrf
+                                            <button class="dropdown-item"><i
+                                                    class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>{{ __('admin.out') }}</button>
+                                        </form>
+
+                                    </div>                                    </ul>
+                                </div>
+                            @else
+                                <!-- عرض أزرار تسجيل الدخول والتسجيل عند عدم تسجيل الدخول -->
+                                <a href="{{ route('login') }}" class="btn btn-primary">{{ __('front.login') }}</a>
+                                <a href="{{ route('register') }}" class="btn btn-outline-primary">{{ __('front.sign_up') }}</a>
+                            @endif
+                        </div>
+                    </div>
+
             </nav>
         </div>
-
-        <!-- Header Mobile -->
-        <div class="wrap-header-mobile">
-            <!-- Logo moblie -->
-            <div class="logo-mobile">
-                <a href="{{ route('front.index') }}"><img src="{{ asset('assets/images/icons/logo-01.png') }}" alt="IMG-LOGO"></a>
-            </div>
-
-            <!-- Icon header -->
-            <div class="wrap-icon-header flex-w flex-r-m m-r-15">
-                   <li class="nav-item dropdown no-arrow">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="mr-2 d-none d-lg-inline text-gray-600 small" style="color:#242f2f;">
-                                <i class="fas fa-globe"></i>
-                                {{ __('admin.langs') }}</span>
-
-                        </a>
-                        <!-- Dropdown - User Information -->
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                            aria-labelledby="userDropdown">
-                            @foreach (LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
-                                <a class="dropdown-item" rel="alternate" hreflang="{{ $localeCode }}"
-                                    href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}">
-                                    {{ $properties['native'] }}
-                                </a>
-                            @endforeach
-
-                        </div>
-                    </li>
-
-                    <div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart"
-                    data-notify="{{ session('cart') ? count(session('cart')) : 0 }}">
-                    <i class="zmdi zmdi-shopping-cart"></i>
-                </div>
-
-                <a href="{{ route('front.favorites') }}"
-                class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10">
-                <i class="zmdi zmdi-favorite-outline"></i>
-                <span id="favorites-count" class="icon-header-noti"></span>
-             </a>
-
-
-
-            </div>
-
-
-            <!-- Button show menu -->
-            <div class="btn-show-menu-mobile hamburger hamburger--squeeze">
-                <span class="hamburger-box">
-                    <span class="hamburger-inner"></span>
-                </span>
-            </div>
-        </div>
-
-
-        <!-- Menu Mobile -->
-        <div class="menu-mobile">
-
-            <ul class="main-menu-m">
-                <li class="active-menu">
-                    <a href="{{ route('front.index') }}">Home</>
-                </li>
-
-                <li >
-                    <a class="label1" data-label1="hot" href="{{ route('front.products') }}">Shop</a>
-                </li>
-
-                <li>
-                    <a href="{{ route('front.shoping') }}">Features</a>
-                </li>
-
-                <li >
-                    <a href="blog.html">Blog</a>
-                </li>
-
-                <li>
-                    <a href="about.html">About</a>
-                </li>
-
-                <li>
-                    <a href="contact.html">Contact</a>
-                </li>
-            </ul>
-        </div>
-
-
-
     </header>
+
+
     @yield('content')
 
      @include('front.partials.footer')
@@ -467,51 +353,6 @@
     <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
     <script src="{{ asset('assets/vendor/isotope/isotope.pkgd.min.js') }}"></script>
 
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const searchInput = document.getElementById('search-input');
-            const searchResults = document.getElementById('search-results');
-
-            // استماع لحدث الإدخال في حقل البحث
-            searchInput.addEventListener('input', function() {
-                const query = searchInput.value.trim();
-
-                if (query.length > 0) {
-                    // إرسال طلب AJAX إلى السيرفر
-                    fetch(`/search-products?query=${encodeURIComponent(query)}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            searchResults.innerHTML = ''; // تفريغ النتائج السابقة
-
-                            if (data.length > 0) {
-                                // عرض النتائج
-                                data.forEach(product => {
-                                    const resultItem = `
-                                        <div style="padding: 10px; border-bottom: 1px solid #ddd;">
-                                            <a href="/product/${product.id}" style="text-decoration: none; color: #333;">
-                                                <strong>${product.trans_name}</strong> -
-                                                <span>Price: $${product.price}</span>
-                                            </a>
-                                        </div>
-                                    `;
-                                    searchResults.insertAdjacentHTML('beforeend', resultItem);
-                                });
-                            } else {
-                                searchResults.innerHTML =
-                                    '<div style="padding: 10px;">No products found.</div>';
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error fetching search results:', error);
-                        });
-                } else {
-                    searchResults.innerHTML = ''; // إخفاء النتائج إذا كان الإدخال فارغًا
-                }
-            });
-        });
-    </script>
-
 <script>
     $(document).ready(function() {
         // تحديث عدد المفضلات عند التحميل
@@ -532,7 +373,29 @@
         updateFavoritesCount();
     });
 </script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const cartIcon = document.querySelector('.icon-header-noti');
 
+    if (!cartIcon) {
+        return; // لا تنفذ الكود إذا لم تكن في المتجر
+    }
+
+    function updateCartCount() {
+        fetch('/carts/count')
+            .then(response => response.json())
+            .then(data => {
+                if (data && typeof data.count !== 'undefined') {
+                    cartIcon.setAttribute('data-notify', data.count);
+                }
+            })
+            .catch(error => console.error('Error updating cart count:', error));
+    }
+
+    updateCartCount();
+});
+
+</script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!--===============================================================================================-->
@@ -589,6 +452,40 @@
 
     @yield('js')
 
+    <script>
+        // Toggle Mobile Menu
+        document.querySelector('.btn-show-menu-mobile').addEventListener('click', function () {
+            const menu = document.querySelector('.menu-mobile');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        });
+    </script>
+
+<script>
+    // Add 'visible' class to elements when they are in viewport
+    document.addEventListener('DOMContentLoaded', function () {
+        const fadeIns = document.querySelectorAll('.fade-in');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        });
+
+        fadeIns.forEach((fadeIn) => observer.observe(fadeIn));
+
+        // Sticky Navbar Effect
+        const navbar = document.querySelector('nav');
+        window.addEventListener('scroll', function () {
+            if (window.scrollY > 50) {
+                navbar.classList.add('sticky');
+            } else {
+                navbar.classList.remove('sticky');
+            }
+        });
+    });
+</script>
 </body>
 
 </html>
