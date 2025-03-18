@@ -35,8 +35,7 @@ Route::group(
                 Route::get('/profile', [AdminController::class, 'profile'])->name('profile');
                 Route::put('/profile', [AdminController::class, 'profile_data'])->name('profile_data');
                 Route::post('/check-profile', [AdminController::class, 'check_password'])->name('check_password');
-                Route::get('/index/stats', [AdminController::class, 'getIndexStats']);
-                Route::get('/chart-data', [AdminController::class, 'getChartData']);
+
 
                 Route::resource('categories', CategoryController::class);
                 Route::resource('products', ProductController::class);

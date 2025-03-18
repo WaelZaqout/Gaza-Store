@@ -10,6 +10,7 @@ use App\Models\Favorite;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 
 class FrontController extends Controller
 {
@@ -176,4 +177,51 @@ class FrontController extends Controller
 
 
 
+        function profile(){
+
+            $carts = Cart::where('user_id', auth()->id())->with('product')->get();
+            $categories = Category::all();
+            $products = Product::latest('id')->paginate(4);
+            $admin =Auth::user();
+            return view('front.profile',compact('admin','categories', 'products','carts'));
+
+        }
+        function profile_data(Request $request){
+
+          $request->validate([
+            'name'=>'required',
+            'current_password'=>'required_with:password',
+            'password'=>'nullable|min:8|confirmed',
+          ]);
+
+          /** @var User $admin */
+          $admin=Auth::user();
+
+
+          $data=[
+            'name'=>$request->name,
+          ];
+          if($request->has('password')){
+            $data['password']= bcrypt($request->password);
+          }
+          $admin->update($data);
+
+
+            if($request->hasFile('image')){
+                if($admin->image){
+                    File::delete(public_path('image/'.$admin->image->path));
+                    $admin->image()->delete();
+                }
+                $img_name=rand().time().$request->file('image')->getClientOriginalName();
+                $request->file('image')->move(public_path('images'),$img_name);
+          //**لاختيار صورة واحدة */
+                $admin->image()->create([
+                    'path'=>$img_name
+                ]);
+            }
+
+
+
+          return redirect()->back()->with('msg','Profile update successfuly');
+        }
     }

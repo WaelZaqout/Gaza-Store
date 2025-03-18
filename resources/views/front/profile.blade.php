@@ -1,4 +1,4 @@
-@extends('admin.master')
+@extends('front.master')
 @section('css')
     <style>
         .prev-img {
@@ -7,13 +7,14 @@
             object-fit: cover;
             border-radius: 50%;
             padding: 5px;
-            border: 1px dashed #a7a7a7;
+            border: 2px solid #4CAF50;
             cursor: pointer;
-            transition: all .3 ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .prev-img:hover {
-            opacity: .8;
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(76, 175, 80, 0.7);
         }
 
         .prev-img-modal {
@@ -22,31 +23,63 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: #06060687;
+            background: rgba(0, 0, 0, 0.7);
             z-index: 9999;
             display: flex;
             justify-content: center;
             align-items: center;
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(10px);
             display: none;
         }
 
         .prev-img-modal img {
-            width: 300px;
-            height: 300px;
+            width: 350px;
+            height: 350px;
             border-radius: 50%;
             object-fit: cover;
+            border: 3px solid #ffffff;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+        }
+
+        .btn-dark {
+            background-color: #4CAF50;
+            border-color: #4CAF50;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-dark:hover {
+            background-color: #388E3C;
+            border-color: #388E3C;
+        }
+
+        .form-control {
+            border: 1px solid #4CAF50;
+            transition: box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #388E3C;
+            box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
         }
     </style>
 @endsection
+
 @section('content')
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-4 text-gray-800">Profile Page</h1>
+    <h1 class="h3 mb-4 text-gray-800"
+    style="margin: 30px;
+       background-color: #a69c9cde;
+        margin: 30px;
+        text-align: center;
+        height: 50px;
+        font-size: 42px;">
+        Profile Page</h1>
 
 
 
-    <form action="{{ route('admin.profile_data') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('front.profile_data') }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('put')
         <div class="prev-img-modal">
@@ -73,7 +106,7 @@
 
 
             </div>
-            <div class="col-md-9">
+            <div class="col-md-9" style="margin-bottom:100px; max-width:50%;margin-left: 200px;padding-left: 120px;">
                 @if ($errors->any())
                     <div class="alert alert-danger">
                         <ul>
@@ -126,51 +159,43 @@
             if (file) {
                 prevImg.src = URL.createObjectURL(file)
             }
-        }
+            }
 
 
-        $('.prev-img').click(function() {
-            let url = $(this).attr('src') // تعديل $this إلى $(this)
+            $('.prev-img').click(function() {
+                let url = $(this).attr('src') // تعديل $this إلى $(this)
 
-            $('.prev-img-modal img').attr('src', url)
-            $('.prev-img-modal').css('display', 'flex')
-        })
+                $('.prev-img-modal img').attr('src', url)
+                $('.prev-img-modal').css('display', 'flex')
+            })
 
-        $('.prev-img-modal').click(function() {
-            $(this).css('display', 'none') // لإخفاء النافذة عند الضغط عليها
-        })
+            $('.prev-img-modal').click(function() {
+                $(this).css('display', 'none') // لإخفاء النافذة عند الضغط عليها
+            })
 
-        $('#current').blur(function() {
-            $.ajax({
-                url: '{{ route('admin.check_password') }}',
-                type: 'post',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    password: $('#current').val()
-                },
-                success: function(res) {
-                    if (res) {
-                        $('.new').prop('disabled', false);
-                        $('#current').removeClass('is-invalid');
-                        $('#current').addClass('is-valid');
-                    } else {
-                        $('.new').prop('disabled', true);
-                        $('.new').val('');
-                        $('#current').removeClass('is-valid');
-                        $('#current').addClass('is-invalid');
+            $('#current').blur(function() {
+                $.ajax({
+                    url: '{{ route('admin.check_password') }}',
+                    type: 'post',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        password: $('#current').val()
+                    },
+                    success: function(res) {
+                        if (res) {
+                            $('.new').prop('disabled', false);
+                            $('#current').removeClass('is-invalid');
+                            $('#current').addClass('is-valid');
+                        } else {
+                            $('.new').prop('disabled', true);
+                            $('.new').val('');
+                            $('#current').removeClass('is-valid');
+                            $('#current').addClass('is-invalid');
+                        }
                     }
-                }
+                });
             });
-        });
 
-        // $('#current').keyup(function() {
 
-        //     if($(this).val().length>0){
-        //         $('.new').prop('disabled',false)
-        //     }else{
-        //          $('.new').prop('disabled',true)//*  يبقى غير مسموح للكتابة   */
-        //         $('.new').val('')//* هنا عند حدف الكلمة القديمة الخانة فاضية*/
-
-        //     }
     </script>
 @endsection

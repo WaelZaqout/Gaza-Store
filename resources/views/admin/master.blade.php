@@ -16,7 +16,11 @@
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
-        <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery and Bootstrap Bundle (includes Popper.js) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
 
     <!-- Custom styles for this template-->
@@ -88,15 +92,7 @@
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
-                        {{-- <ul>
-                            @foreach (LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
-                                <li>
-                                    <a rel="alternate" hreflang="{{ $localeCode }}" href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}">
-                                        {{ $properties['native'] }}
-                                    </a>
-                                </li>
-                            @endforeach
-                        </ul> --}}
+
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -266,13 +262,82 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
     <script>
-        let userId = '{{ Auth::id()}}'
+        let userId = '{{ Auth::id() }}'
     </script>
     @vite(['resources/js/app.js'])
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 
-<!-- إضافة الـ CSS و الـ JS الخاصة بـ Select2 -->
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // تهيئة DataTables لجدول الطلبات
+            let ordersTable = $('#ordersTable').DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": true,
+                "info": true
+            });
+
+            // تهيئة DataTables لجدول الزبائن
+            let customersTable = $('#customersTable').DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": true,
+                "info": true
+            });
+
+            // البحث في جدول الطلبات
+            $('#searchOrder').on('keyup', function() {
+                ordersTable.search(this.value).draw();
+            });
+
+            // البحث في جدول الزبائن (بحث بالاسم)
+            $('#searchCustomer').on('keyup', function() {
+                customersTable.search(this.value).draw();
+            });
+
+            // تصفية الطلبات حسب الحالة
+            $('#filterStatus').on('change', function() {
+                let status = this.value;
+                ordersTable.column(3).search(status).draw();
+            });
+
+            // تصفية الطلبات بين تاريخين
+            $.fn.dataTable.ext.search.push(
+                function(settings, data, dataIndex) {
+                    let startDate = $('#startDate').val();
+                    let endDate = $('#endDate').val();
+                    let orderDate = data[4]; // العمود الخامس لتاريخ الإنشاء
+
+                    if ((startDate === "" && endDate === "") ||
+                        (startDate === "" && orderDate <= endDate) ||
+                        (endDate === "" && orderDate >= startDate) ||
+                        (orderDate >= startDate && orderDate <= endDate)) {
+                        return true;
+                    }
+                    return false;
+                }
+            );
+
+            // تنفيذ الفلترة عند تغيير التواريخ
+            $('#startDate, #endDate').on('change', function() {
+                ordersTable.draw();
+            });
+        });
+
+        $(document).ready(function() {
+            // إخفاء قسم الفلترة عند تحميل الصفحة
+            $("#filterSection").hide();
+
+            // عند النقر على زر الفلترة، يظهر أو يختفي القسم
+            $("#toggleFilter").click(function() {
+                $("#filterSection").slideToggle(300);
+            });
+        });
+    </script>
+    <!-- إضافة الـ CSS و الـ JS الخاصة بـ Select2 -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 
     <!-- Bootstrap core JavaScript-->
     <script src="{{ asset('back/vendor/jquery/jquery.min.js') }}"></script>
@@ -291,11 +356,10 @@
     <script src="{{ asset('back/js/demo/chart-area-demo.js') }}"></script>
     <script src="{{ asset('back/js/demo/chart-pie-demo.js') }}"></script>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        function updateIndexStats() {  // ✅ الاسم صحيح الآن
+        function updateIndexStats() { // ✅ الاسم صحيح الآن
             $.ajax({
-                url: "{{ url('/admin/index/stats') }}",  // ✅ تأكد أن هذا المسار صحيح في routes/web.php
+                url: "{{ url('/admin/index/stats') }}", // ✅ تأكد أن هذا المسار صحيح في routes/web.php
                 type: "GET",
                 dataType: "json",
                 success: function(data) {
@@ -319,88 +383,47 @@
             updateIndexStats();
         });
     </script>
-
-<!-- Scripts for Chart.js and AJAX -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<script>
-    let earningsChart, revenueChart;
-
-    function loadChartData() {
-        $.ajax({
-            url: "{{ url('/admin/chart-data') }}",
-            type: "GET",
-            dataType: "json",
-            success: function(data) {
-                console.log("Data Loaded:", data);
-
-                // تحديث مخطط الأرباح الشهرية (Area Chart)
-                let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-                let earningsData = new Array(12).fill(0);
-
-                Object.keys(data.earnings).forEach(month => {
-                    earningsData[month - 1] = data.earnings[month]; // ضبط القيم حسب الأشهر
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            setTimeout(() => {
+                document.querySelectorAll('.bg-lightgreen').forEach(row => {
+                    row.classList.remove('bg-lightgreen');
                 });
-
-                if (earningsChart) earningsChart.destroy(); // حذف الرسم القديم لمنع التكرار
-
-                let ctx1 = document.getElementById('myAreaChart').getContext('2d');
-                earningsChart = new Chart(ctx1, {
-                    type: 'line',
-                    data: {
-                        labels: months,
-                        datasets: [{
-                            label: 'Earnings ($)',
-                            data: earningsData,
-                            backgroundColor: 'rgba(78, 115, 223, 0.1)',
-                            borderColor: 'rgba(78, 115, 223, 1)',
-                            borderWidth: 2,
-                            pointRadius: 3,
-                            pointBackgroundColor: 'rgba(78, 115, 223, 1)',
-                            pointBorderColor: 'rgba(255, 255, 255, 0.8)'
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
-                        }
-                    }
-                });
-
-                // تحديث مخطط مصادر الإيرادات (Pie Chart)
-                if (revenueChart) revenueChart.destroy(); // حذف الرسم القديم لمنع التكرار
-
-                let ctx2 = document.getElementById('myPieChart').getContext('2d');
-                revenueChart = new Chart(ctx2, {
-                    type: 'doughnut',
-                    data: {
-                        labels: Object.keys(data.revenueSources),
-                        datasets: [{
-                            data: Object.values(data.revenueSources),
-                            backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
-                            hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf']
-                        }]
-                    }
-                });
-            },
-            error: function(xhr, status, error) {
-                console.error("Error loading chart data:", error);
-            }
+            }, 10000); // يختفي اللون بعد 5 ثوانٍ
         });
-    }
 
-    // تحميل البيانات عند تحميل الصفحة
-    $(document).ready(function() {
-        loadChartData();
+        // استقبال إشعار الطلب الجديد وإضافته إلى الجدول
+        Echo.channel('orders')
+            .listen('NewOrderCreated', (order) => {
+                let newRow = `<tr class="bg-lightgreen" data-order-id="${order.id}">
+                    <td>${order.id}</td>
+                    <td>${order.user_id}</td>
+                    <td>$${order.total_price.toFixed(2)}</td>
+                    <td><span class="badge bg-warning">${order.status}</span></td>
+                    <td>${order.created_at}</td>
+                    <td>${order.updated_at}</td>
+                    <td>
+                        <form class="d-inline" action="/admin/orders/${order.id}" method="POST">
+                            <button onclick="return confirm('Are You Sure?!')" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                            <a class="btn btn-sm btn-primary" href="/admin/orders/${order.id}">
+                                <i class="fas fa-info-circle"></i> Details
+                            </a>
+                        </form>
+                    </td>
+                </tr>`;
 
-        // تحديث البيانات كل 10 ثوانٍ
-        setInterval(loadChartData, 10000);
-    });
-</script>
+                document.getElementById("orders-table").insertAdjacentHTML("afterbegin", newRow);
+
+                setTimeout(() => {
+                    document.querySelector(`[data-order-id="${order.id}"]`).classList.remove('bg-lightgreen');
+                }, 5000);
+            });
+    </script>
+    <!-- إضافة مكتبة DataTables -->
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+
+
 </body>
 
 </html>

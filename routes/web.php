@@ -30,6 +30,10 @@ Route::group([
     Route::get('/contact', [FrontController::class, 'contact'])->name('front.contact');
     Route::get('/footer', [FrontController::class, 'footer'])->name('front.footer');
     Route::post('/search', [FrontController::class, 'search'])->name('search');
+    Route::get('/profile', [FrontController::class, 'profile'])->name('front.profile');
+        Route::put('/profile', [FrontController::class, 'profile_data'])->name('front.profile_data');
+        Route::post('/check-profile', [FrontController::class, 'check_password'])->name('front.check_password');
+
 
     // المسارات المحمية بالمصادقة
     Route::middleware(['auth'])->group(function () {
@@ -54,12 +58,7 @@ Route::group([
             Route::get('/count', [CartController::class, 'getCartsCount'])->name('front.carts.count');
         });
 
-        // الحساب الشخصي
-        Route::prefix('profile')->group(function () {
-            Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
-            Route::patch('/', [ProfileController::class, 'update'])->name('profile.update');
-            Route::delete('/', [ProfileController::class, 'destroy'])->name('profile.destroy');
-        });
+
     });
 
     // الدفع

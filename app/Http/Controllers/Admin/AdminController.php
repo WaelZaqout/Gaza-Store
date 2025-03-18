@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller; 
+use App\Http\Controllers\Controller;
 use App\Models\notifications;
 use App\Models\order;
 use App\Models\User;
@@ -15,12 +15,14 @@ class AdminController extends Controller
 {
     public function index()
     {
-        $monthlyEarnings = order::whereMonth('created_at', date('m'))->sum('total_price');
-        $totalSales = order::sum('total_price');
-        $totalOrders = order::count();
-        $totalUsers = User::count();
+            $monthlyEarnings = order::whereMonth('created_at', date('m'))->sum('total_price');
+            $totalSales = order::sum('total_price');
+            $totalOrders = order::count();
+            $totalUsers = User::count();
+            $orders = order::with('user', 'payment')->latest('id')->paginate(8);
+            $users = User::all();
 
-        return view('admin.index', compact('monthlyEarnings', 'totalSales', 'totalOrders', 'totalUsers'));
+        return view('admin.index', compact('monthlyEarnings', 'totalSales', 'totalOrders', 'totalUsers','orders','users'));
     }
 
 
@@ -51,18 +53,18 @@ class AdminController extends Controller
       $admin->update($data);
 
 
-    if($request->hasFile('image')){
-        if($admin->image){
-            File::delete(public_path('image/'.$admin->image->path));
-            $admin->image()->delete();
+        if($request->hasFile('image')){
+            if($admin->image){
+                File::delete(public_path('image/'.$admin->image->path));
+                $admin->image()->delete();
+            }
+            $img_name=rand().time().$request->file('image')->getClientOriginalName();
+            $request->file('image')->move(public_path('images'),$img_name);
+    //**لاختيار صورة واحدة */
+            $admin->image()->create([
+                'path'=>$img_name
+            ]);
         }
-        $img_name=rand().time().$request->file('image')->getClientOriginalName();
-        $request->file('image')->move(public_path('images'),$img_name);
-   //**لاختيار صورة واحدة */
-        $admin->image()->create([
-            'path'=>$img_name
-        ]);
-    }
 
 
 

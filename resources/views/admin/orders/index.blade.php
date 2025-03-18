@@ -26,10 +26,10 @@
         <th>created_at</th>
         <th>updated_at</th>
         <th>Actions</th>
-    </tr>
+     </tr>
 
-    @forelse ( $orders as $order )
-    <tr>
+        @forelse ( $orders as $order )
+        <tr>
         <td>{{ $order->id }}</td>
         <td>{{ $order->user_id }}</td> <!-- عرض اسم المستخدم -->
 
@@ -53,12 +53,12 @@
 
             </form>
         </td>
-    </tr>
-    @empty
+        </tr>
+        @empty
         <tr>
             <td colspan="7" class="text-center">No Data Found</td>
         </tr>
-    @endforelse
+     @endforelse
 
     </table>
 
