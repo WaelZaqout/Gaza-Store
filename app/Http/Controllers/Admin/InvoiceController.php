@@ -11,7 +11,9 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Http\Controllers\Controller;
+use App\Jobs\SendInvoiceEmailJob;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Mail;
 
 class InvoiceController extends Controller
 {
@@ -101,10 +103,20 @@ class InvoiceController extends Controller
                 'path' => $img_name,
             ]);
         }
+        // توليد ملف PDF
+        $pdf = Pdf::loadView('emails.invoice_pdf', compact('invoice'));
 
+        // إرسال الإيميل مع المرفق
+        Mail::send([], [], function ($message) use ($invoice, $pdf) {
+            $message->to($invoice->user->email)
+                ->subject('🧾 فاتورتك من Gaza Store')
+                ->attachData($pdf->output(), "invoice_{$invoice->invoice_number}.pdf");
+        });
         return redirect()->route('admin.invoices.index')
             ->with('msg', 'تمت إضافة الفاتورة بنجاح')
             ->with('type', 'success');
+
+
     }
 
 
@@ -210,6 +222,7 @@ class InvoiceController extends Controller
         {
             $orders = Order::where('user_id', $user_id)->get(['id']);
             return response()->json($orders);
+
         }
 
         public function getPaymentStatus($order_id)
@@ -228,4 +241,24 @@ class InvoiceController extends Controller
 
         }
 
+        public function sendInvoiceEmail($id)
+        {
+            $invoice = Invoice::with('user')->findOrFail($id);
+
+            if (!$invoice->user || !$invoice->user->email) {
+                return redirect()->back()->with('error', 'المستخدم لا يملك بريدًا إلكترونيًا.');
+            }
+
+            // توليد PDF
+            $pdf = Pdf::loadView('emails.invoice_pdf', compact('invoice'));
+
+            // إرسال الإيميل
+            Mail::send([], [], function ($message) use ($invoice, $pdf) {
+                $message->to($invoice->user->email)
+                        ->subject('🧾 فاتورتك من Gaza Store')
+                        ->attachData($pdf->output(), "invoice_{$invoice->invoice_number}.pdf");
+            });
+
+            return redirect()->back()->with('success', '📩 تم إرسال الفاتورة بنجاح إلى العميل.');
+        }
 }

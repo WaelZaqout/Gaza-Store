@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class order_details extends Model
 {
+    
     use HasFactory;
 
     protected $guarded = [];
@@ -22,6 +23,9 @@ class order_details extends Model
     function order(){
         return $this->belongsTo(order::class)->withDefault();
 
+    }
+    function payment(){
+        return $this->hasOne(payments::class, 'order_id');
     }
 
 

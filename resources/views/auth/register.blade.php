@@ -167,3 +167,30 @@
 </body>
 
 </html>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // عند إرسال النموذج
+        $('form').submit(function (e) {
+            e.preventDefault();  // منع إرسال النموذج بالطريقة العادية
+
+            // إرسال الطلب باستخدام AJAX
+            $.ajax({
+                url: "{{ route('register') }}", // وجهة طلب التسجيل
+                method: "POST",
+                data: $(this).serialize(), // تسلسل البيانات
+                success: function (response) {
+                    // عند النجاح، عرض الإشعار للمستخدم
+                    alert(response.message); // على سبيل المثال: 'تم التسجيل بنجاح!'
+
+                    // يمكنك هنا إعادة توجيه المستخدم إلى الصفحة الرئيسية أو عرض إشعار آخر
+                    window.location.href = "{{ route('front.index') }}";  // أو أي رابط آخر تريد إعادة توجيه المستخدم إليه
+                },
+                error: function (xhr, status, error) {
+                    // في حال حدوث خطأ
+                    alert('حدث خطأ أثناء التسجيل');
+                }
+            });
+        });
+    });
+</script>

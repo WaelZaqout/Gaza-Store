@@ -480,26 +480,40 @@
         });
     </script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const cartIcon = document.querySelector('.icon-header-noti');
+    document.addEventListener("DOMContentLoaded", function () {
+    const cartIcon = document.querySelector('.icon-header-noti');
 
-            if (!cartIcon) {
-                return; // لا تنفذ الكود إذا لم تكن في المتجر
+    if (!cartIcon) return;
+
+    async function updateCartCount() {
+        const locale = document.documentElement.lang || 'ar';
+        const url = `/${locale}/carts/count`;
+
+        try {
+            const response = await fetch(url, {
+                headers: {
+                    'Accept': 'application/json' // ❗يُجبر Laravel على إرجاع JSON وليس HTML
+                }
+            });
+
+            if (!response.ok) {
+                console.error('Error status:', response.status);
+                return;
             }
 
-            function updateCartCount() {
-                fetch('/carts/count')
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data && typeof data.count !== 'undefined') {
-                            cartIcon.setAttribute('data-notify', data.count);
-                        }
-                    })
-                    .catch(error => console.error('Error updating cart count:', error));
-            }
+            const data = await response.json();
 
-            updateCartCount();
-        });
+            if (typeof data.count !== 'undefined') {
+                cartIcon.setAttribute('data-notify', data.count);
+            }
+        } catch (error) {
+            console.error('Fetch error:', error);
+        }
+    }
+
+    updateCartCount();
+});
+
     </script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

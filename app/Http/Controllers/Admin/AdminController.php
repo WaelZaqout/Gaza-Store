@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\notifications;
-use App\Models\order;
 use App\Models\User;
+use App\Models\order;
 use Illuminate\Http\Request;
+use App\Models\notifications;
+use App\Jobs\SendUserEmailJob;
+use App\Jobs\SendWelcomeEmailJob;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
@@ -123,5 +126,39 @@ class AdminController extends Controller
             ]);
         }
 
+
+        public function sendEmailsToUsers(Request $request)
+        {
+            $count = intval($request->input('count', 10)); // العدد الذي أدخله المستخدم
+            $delay = 0;
+
+            // جلب العدد المحدد فقط
+            $users = User::whereNotNull('email')->take($count)->get();
+
+            foreach ($users as $user) {
+                SendUserEmailJob::dispatch($user->id)->delay(now()->addSeconds($delay));
+                $delay += 1; // كل إيميل يتأخر 1 ثانية (يمكنك تعديلها)
+            }
+
+            return redirect('admin');
+
+         }
+
+
+         public function printSend(Request $request)
+         {
+             $count = intval($request->input('count', 10)); // العدد الذي أدخله المستخدم
+             $delay = 0;
+
+             // جلب العدد المحدد فقط
+             $users = User::whereNotNull('email')->take($count)->get();
+
+             foreach ($users as $user) {
+                SendWelcomeEmailJob::dispatch($user->id)->delay(now()->addSeconds($delay));
+                 $delay += 1;
+             }
+
+             return redirect('admin');
+          }
 
 }

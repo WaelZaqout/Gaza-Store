@@ -20,6 +20,10 @@ class payments extends Model
         return $this->belongsTo(order::class)->withDefault();
 
     }
+    function order_details(){
+        return $this->hasMany(order_details::class);
+
+    }
 
      // علاقة مع الفواتير
      public function invoices()

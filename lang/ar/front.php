@@ -13,6 +13,11 @@ return[
     'shop now' => 'تسوق الان',
     'search' => 'بحث ',
     'search pro' => 'ابحث عن المنتجات ',
+    'carts' => 'السلة ',
+    'carttotals' => ' إجمالي سلة التسوق ',
+    'subtotal' => 'المبلغ الاجمالي ',
+    'checkout' => 'ادفع من هنا ',
+    'continue_shopping' => 'واصل التسوق ',
 
     'Image' => 'الصورة ',
     'Product' => 'المنتج ',

@@ -36,27 +36,28 @@ class OrderController extends Controller
             ->with('type', 'success');
     }
 
-    public function edit(order $order)
+    public function edit(Order $order)
     {
-        $user = User::select('id', 'name')->get();
-        return view('admin.orders.edit', compact('order', 'user'));
+        return view('admin.orders.edit', compact('order'));
     }
 
-    public function update(Request $request, order $order)
+    public function update(Request $request, Order $order)
     {
         $request->validate([
-            'user_id' => 'required|exists:user,id',
-            'total_price' => 'required|numeric',
+            'status' => 'required|in:pending,paid,canceled',
         ]);
 
-        $order->update([
-            'user_id' => $request->user_id,
-            'total_price' => $request->total_price,
-        ]);
+        $order->status = $request->status;
+
+        if ($request->status === 'paid') {
+            $order->updated_at = now(); // تحديث وقت الدفع
+        }
+
+        $order->save();
 
         return redirect()
             ->route('admin.orders.index')
-            ->with('msg', 'order updated successfully')
+            ->with('msg', 'تم تحديث حالة الدفع بنجاح')
             ->with('type', 'success');
     }
 
@@ -91,7 +92,6 @@ class OrderController extends Controller
         $order = order::with('order_details.product', 'user', 'payment')->findOrFail($id);
         return view('admin.orders.details', compact('order'));
     }
-
 
 
 

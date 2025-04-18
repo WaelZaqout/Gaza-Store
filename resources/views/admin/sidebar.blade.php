@@ -105,7 +105,7 @@
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item">
-            <a class="nav-link" href="">
+            <a class="nav-link" href="{{ route('admin.payments.index') }}">
                 <i class="fas fa-fw fa-dollar-sign"></i>
                 <span>{{ __('admin.payments') }}</span></a>
         </li>

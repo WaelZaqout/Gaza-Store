@@ -28,7 +28,7 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -36,7 +36,6 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'phone' => ['required', 'string', 'max:15'],
             'address' => ['required', 'string', 'max:255'],
-
         ]);
 
         $user = User::create([
@@ -47,10 +46,14 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        event(new Registered($user));
+        // ارسال حدث التسجيل
+        // event(new Registered($user));
 
+        // تسجيل الدخول تلقائيًا
         Auth::login($user);
 
-        return redirect(RouteServiceProvider::HOME);
+        // إرسال استجابة JSON عند النجاح
+        return response()->json(['message' => 'تم التسجيل بنجاح!']);
     }
+
 }

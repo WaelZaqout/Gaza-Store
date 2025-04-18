@@ -221,3 +221,67 @@
 </div>
 
 
+      {{-- خيارات المنتج --}}
+      <div class="col-12 mt-4">
+        <h5>Product Options (Size - Color - Quantity)</h5>
+        <table class="table" id="variantTable">
+            <thead>
+                <tr>
+                    <th>Size</th>
+                    <th>Color</th>
+                    <th>Quantity</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($product->variants as $i => $variant)
+                    <tr>
+                        <td><input name="variants[{{ $i }}][size]" class="form-control" value="{{ $variant->size }}" required></td>
+                        <td><input name="variants[{{ $i }}][color]" class="form-control" value="{{ $variant->color }}" required></td>
+                        <td><input name="variants[{{ $i }}][quantity]" class="form-control" type="number" value="{{ $variant->quantity }}" required></td>
+                        <td><button type="button" class="btn btn-danger remove-variant">X</button></td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td><input name="variants[0][size]" class="form-control" required></td>
+                        <td><input name="variants[0][color]" class="form-control" required></td>
+                        <td><input name="variants[0][quantity]" class="form-control" type="number" required></td>
+                        <td><button type="button" class="btn btn-danger remove-variant">X</button></td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+        <button type="button" class="btn btn-success btn-sm" id="addVariant">+ Add Option</button>
+    </div>
+
+    <div class="col-12 text-end mt-3">
+        <button type="submit" class="btn btn-primary">Update Product</button>
+    </div>
+</div>
+</form>
+</div>
+</div>
+
+{{-- Script لإضافة صفوف خيارات جديدة --}}
+<script>
+let variantIndex = {{ $product->variants->count() }};
+document.getElementById('addVariant').addEventListener('click', function () {
+const tbody = document.querySelector('#variantTable tbody');
+const row = document.createElement('tr');
+row.innerHTML = `
+<td><input name="variants[${variantIndex}][size]" class="form-control" required></td>
+<td><input name="variants[${variantIndex}][color]" class="form-control" required></td>
+<td><input name="variants[${variantIndex}][quantity]" class="form-control" type="number" required></td>
+<td><button type="button" class="btn btn-danger remove-variant">X</button></td>
+`;
+tbody.appendChild(row);
+variantIndex++;
+});
+
+document.addEventListener('click', function (e) {
+if (e.target.classList.contains('remove-variant')) {
+e.target.closest('tr').remove();
+}
+});
+</script>
+

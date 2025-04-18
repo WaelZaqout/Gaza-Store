@@ -12,7 +12,12 @@ return [
     'blog' => 'Blog',
     'shop now' => 'Shop Now ',
     'search' => 'Search ',
+    'carts' => 'Carts ',
     'search pro' => 'Search For Products',
+    'continue_shopping' => 'continue_shopping',
+    'checkout' => ' Checkout ',
+    'subtotal' => 'Subtotal ',
+    'carttotals' => ' CartTotals',
 
     'Image' => 'Image ',
     'Product' => 'Product ',

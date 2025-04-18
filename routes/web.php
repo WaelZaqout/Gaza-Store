@@ -21,7 +21,7 @@ Route::group([
     Route::get('/', [FrontController::class, 'index'])->name('front.index');
     Route::get('/products', [FrontController::class, 'products'])->name('front.products');
     Route::get('/products/{id}', [FrontController::class, 'show']);
-    Route::get('/filter-products/{id}', [FrontController::class, 'filterProducts']);
+    Route::get('/filter-products/{id}', [FrontController::class, 'filterProducts']);  
     Route::get('/product/{id}', [FrontController::class, 'getProduct']);
     Route::get('/category/{id}', [FrontController::class, 'category'])->name('front.category');
     Route::get('/shoping', [FrontController::class, 'shoping'])->name('front.shoping');
@@ -55,7 +55,7 @@ Route::group([
             Route::delete('/remove/{id}', [CartController::class, 'removeFromcart'])->name('carts.remove');
             Route::post('/is-cart', [CartController::class, 'isCart'])->name('front.carts.isCart');
             Route::get('/', [CartController::class, 'cartsPage'])->name('front.carts');
-            Route::get('/count', [CartController::class, 'getCartsCount'])->name('front.carts.count');
+             Route::get('/count', [CartController::class, 'getCartsCount'])->name('front.carts.count');
         });
 
 
@@ -65,11 +65,10 @@ Route::group([
     Route::prefix('checkout')->group(function () {
         Route::get('/', [PaymentController::class, 'checkout'])->name('checkout');
         Route::post('/', [FrontController::class, 'checkoutpage'])->name('checkout.page');
-        Route::get('/success', function () { return view('front.checkout.success'); })->name('checkout.success');
+        Route::get('/success', [PaymentController::class, 'paymentSuccess'])->name('checkout.success');
         Route::get('/canceled', function () { return view('front.checkout.canceled'); })->name('checkout.canceled');
         Route::post('/process', [PaymentController::class, 'processPayment'])->name('checkout.process');
     });
-
 
     // إدارة الإشعارات
     Route::post('stripe/webhook', [StripeWebhookController::class, 'handleWebhook']);

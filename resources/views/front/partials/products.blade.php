@@ -133,26 +133,31 @@
 
 
                    <!-- ✅ قسم تفاصيل المنتج -->
-                    <div class="product-details">
-                        <h4 class="product-title">{{ $product->trans_name }}</h4>
-                        <span class="product-price" id="final" data-price="{{ $product->price }}">
+                 <!-- قسم تفاصيل المنتج -->
+                <div  class="col-md-6 col-lg-5 p-b-30" style="padding-left: 30px;">
+                    <div class="p-r-50 p-t-5 p-lr-0-lg"  style="padding-left: 30px;">
+                        <h4 class="mtext-105 cl2 js-name-detail p-b-14 ">
+                            {{ $product->trans_name }}
+                        </h4>
+
+                        <span id="final" class="mtext-106 cl2" data-price="{{ $product->price }}">
                             ${{ number_format($product->price, 2) }}
                         </span>
-                        <p class="product-description">{{ $product->trans_description }}</p>
 
+
+                        <p class="stext-102 cl3 p-t-23">
+                            {{ $product->trans_description }}
+                        </p>
                         <!-- ✅ خيارات المنتج -->
                         <div class="product-options">
                             <!-- خيار الحجم -->
                             <div class="option-group">
                                 <div class="option-label"><i class="fa fa-arrows-alt"></i> {{ __('front.Size') }}</div>
                                 <div class="option-select">
-                                    <select>
-                                        <option>Choose an option</option>
-                                        <option>Size S</option>
-                                        <option>Size M</option>
-                                        <option>Size L</option>
-                                        <option>Size XL</option>
+                                    <select name="size" id="size-select">
+                                        <option disabled selected>{{ __('front.Choose an option') }}</option>
                                     </select>
+
                                 </div>
                             </div>
 
@@ -160,13 +165,13 @@
                             <div class="option-group">
                                 <div class="option-label"><i class="fa fa-paint-brush"></i> {{ __('front.Color') }}</div>
                                 <div class="option-select">
-                                    <select>
-                                        <option>Choose an option</option>
-                                        <option>Red</option>
-                                        <option>Blue</option>
-                                        <option>White</option>
-                                        <option>Grey</option>
-                                    </select>
+
+
+                                        <select name="color" id="color-select">
+                                            <option disabled selected>{{ __('front.Choose an option') }}</option>
+                                        </select>
+
+
                                 </div>
                             </div>
                         </div>
@@ -221,70 +226,125 @@
 
         </div>
     </div>
+    <script>
+        $(document).ready(function () {
+            let allVariants = [];
 
-<script>
-    $(document).ready(function() {
-        $(document).on('click', '.js-show-modal1', function(e) {
-            e.preventDefault();
+            $('.js-show-modal1').click(function (e) {
+                e.preventDefault();
 
-            var productId = $(this).data('id');
-            var productPrice = $(this).data('price');
+                const productId = $(this).data('id');
+                const productPrice = $(this).data('price');
 
-            // تحديث حقول النموذج داخل المودال
-            $('#cart-form input[name="product_id"]').val(productId);
-            $('#cart-form input[name="quantity"]').val(1);
+                // إعادة تعيين النموذج
+                $('#cart-form input[name="product_id"]').val(productId);
+                $('#cart-form input[name="quantity"]').val(1);
+                $('.qty').val(1);
+                $('#final').data('price', productPrice).text('$' + productPrice);
 
-            // تحديث السعر والمعرف المعروضين في المودال
-            $('#final').data('price', productPrice).text('$' + productPrice);
-            $('.qty').val(1);
+                // مسح الحقول
+                $('.js-name-detail').text('');
+                $('.mtext-106.cl2').text('');
+                $('.stext-102.cl3').text('');
+                $('#size-select').html('<option disabled selected>Choose size</option>');
+                $('#color-select').html('<option disabled selected>Choose color</option>');
 
-            // جلب بيانات المنتج عبر AJAX
-            $.ajax({
-                url: '/product/' + productId,
-                type: 'GET',
-                success: function(response) {
-                    $('.js-name-detail').text(response.name);
-                    $('.mtext-106.cl2').text('$' + response.price);
-                    $('.stext-102.cl3').text(response.description);
+                // تحميل بيانات المنتج
+                $.ajax({
+                    url: '/product/' + productId,
+                    type: 'GET',
+                    success: function (response) {
+                        // 1. البيانات العامة
+                        $('.js-name-detail').text(response.name);
+                        $('.mtext-106.cl2').text('$' + response.price);
+                        $('.stext-102.cl3').text(response.description);
 
-                    // تحديث الصورة الرئيسية
-                    $('.main-image img').attr('src', response.image ? '/images/' + response.image : '/images/default-image.jpg');
+                        // 2. الصور
+                        const mainImage = document.querySelector('.main-image img');
+                        mainImage.src = response.image ? '/images/' + response.image : '/images/default-image.jpg';
 
-                    // تحديث الصور المصغرة
-                    const thumbnailsContainer = $('.thumbnails');
-                    thumbnailsContainer.html('');
+                        const thumbnailsContainer = document.querySelector('.thumbnails');
+                        thumbnailsContainer.innerHTML = '';
 
-                    if (response.gallery && response.gallery.length > 0) {
-                        response.gallery.forEach(img => {
-                            const thumbnail = `<div class="thumbnail">
-                                <img src="/images/${img.path}" alt="Thumbnail Image">
-                            </div>`;
-                            thumbnailsContainer.append(thumbnail);
+                        if (response.gallery.length > 0) {
+                            response.gallery.forEach(img => {
+                                const thumbnail = document.createElement('div');
+                                thumbnail.classList.add('thumbnail');
+                                thumbnail.innerHTML = `<img src="/images/${img.path}" alt="Thumbnail">`;
+
+                                thumbnail.addEventListener('click', function () {
+                                    mainImage.src = '/images/' + img.path;
+                                });
+
+                                thumbnailsContainer.appendChild(thumbnail);
+                            });
+                        } else {
+                            const defaultThumb = document.createElement('div');
+                            defaultThumb.classList.add('thumbnail');
+                            defaultThumb.innerHTML = `<img src="/images/default-thumbnail.jpg" alt="Default">`;
+                            thumbnailsContainer.appendChild(defaultThumb);
+                        }
+
+                        // 3. المتغيرات (variants)
+                        allVariants = response.variants;
+
+                        const sizes = [...new Set(allVariants.map(v => v.size))];
+                        const colors = [...new Set(allVariants.map(v => v.color))];
+
+                        $('#size-select').html('<option disabled selected>Choose size</option>');
+                        sizes.forEach(size => {
+                            $('#size-select').append(`<option value="${size}">${size}</option>`);
                         });
 
-                        // تحديث الصورة الرئيسية عند الضغط على الصورة المصغرة
-                        $('.thumbnail img').click(function() {
-                            $('.main-image img').attr('src', $(this).attr('src'));
+                        $('#color-select').html('<option disabled selected>Choose color</option>');
+                        colors.forEach(color => {
+                            $('#color-select').append(`<option value="${color}">${color}</option>`);
                         });
-                    } else {
-                        thumbnailsContainer.html('<div class="thumbnail"><img src="/images/default-thumbnail.jpg" alt="Default Thumbnail Image"></div>');
+                    },
+                    error: function () {
+                        console.error('Error loading product details');
                     }
-                },
-                error: function() {
-                    console.error('Error loading product details');
-                }
+                });
+
+                $('.js-modal1').addClass('show-modal1');
             });
 
-            $('.js-modal1').addClass('show-modal1');
-        });
+            $('.js-hide-modal1').click(function () {
+                $('.js-modal1').removeClass('show-modal1');
+            });
 
-        // إغلاق المودال عند الضغط على زر الإغلاق
-        $('.js-hide-modal1').click(function() {
-            $('.js-modal1').removeClass('show-modal1');
-        });
-    });
+            // عند تغيير الحجم
+            $('#size-select').on('change', function () {
+                const selectedSize = $(this).val();
+                const matchedColors = allVariants
+                    .filter(v => v.size === selectedSize && v.quantity > 0)
+                    .map(v => v.color);
 
-</script>
+                const uniqueColors = [...new Set(matchedColors)];
+
+                $('#color-select').html('<option disabled selected>Choose color</option>');
+                uniqueColors.forEach(color => {
+                    $('#color-select').append(`<option value="${color}">${color}</option>`);
+                });
+            });
+
+            // عند تغيير اللون
+            $('#color-select').on('change', function () {
+                const selectedColor = $(this).val();
+                const matchedSizes = allVariants
+                    .filter(v => v.color === selectedColor && v.quantity > 0)
+                    .map(v => v.size);
+
+                const uniqueSizes = [...new Set(matchedSizes)];
+
+                $('#size-select').html('<option disabled selected>Choose size</option>');
+                uniqueSizes.forEach(size => {
+                    $('#size-select').append(`<option value="${size}">${size}</option>`);
+                });
+            });
+        });
+    </script>
+
 
     <script>
         $(document).ready(function() {

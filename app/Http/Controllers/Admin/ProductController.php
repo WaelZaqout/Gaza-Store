@@ -60,6 +60,13 @@ class ProductController extends Controller
             'category_id'=>$request->category_id,
         ]);
 
+        foreach ($request->variants as $variant) {
+            $product->variants()->create([
+                'size' => $variant['size'],
+                'color' => $variant['color'],
+                'quantity' => $variant['quantity'],
+            ]);
+        }
 
         $img_name = rand() . time() . $request->file('image')->getClientOriginalName();
         $request->file('image')->move(public_path('images'), $img_name);
@@ -89,7 +96,6 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        //
     }
 
     /**
@@ -108,42 +114,58 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $request->validate([
-
-            'name_en'=>'required',
-            'name_ar'=>'required',
-
-            'price'=>'required',
-            'description_en'=>'required',
-            'description_ar'=>'required',
-            'quantity'=>'required',
-            'category_id'=>'required',
+            'name_en' => 'required',
+            'name_ar' => 'required',
+            'price' => 'required',
+            'description_en' => 'required',
+            'description_ar' => 'required',
+            'quantity' => 'required',
+            'category_id' => 'required',
         ]);
-        // $data=$request->except('_token','image','gallery');
 
+        // تحديث بيانات المنتج الأساسية
         $product->update([
-            'name'=> '',
-            'descrizzzzzzption'=> '',
-            'price'=>$request->price,
-            'quantity'=>$request->quantity,
-            'category_id'=>$request->category_id,
+            'name' => [
+                'en' => $request->name_en,
+                'ar' => $request->name_ar
+            ],
+            'description' => [
+                'en' => $request->description_en,
+                'ar' => $request->description_ar
+            ],
+            'price' => $request->price,
+            'quantity' => $request->quantity,
+            'category_id' => $request->category_id,
         ]);
 
+        // حذف كل المتغيرات القديمة وإعادة إنشائها
+        $product->variants()->delete();
 
-        if($request->hasFile('image')){
-            if($product->image){
-                File::delete(public_path( 'images/' .$product->image->path));
+        if ($request->has('variants')) {
+            foreach ($request->variants as $variant) {
+                $product->variants()->create([
+                    'size' => $variant['size'],
+                    'color' => $variant['color'],
+                    'quantity' => $variant['quantity'],
+                ]);
             }
-            $product->image()->delete();
+        }
+
+        // تحديث الصورة الرئيسية
+        if ($request->hasFile('image')) {
+            if ($product->image) {
+                File::delete(public_path('images/' . $product->image->path));
+                $product->image()->delete();
+            }
 
             $img_name = rand() . time() . $request->file('image')->getClientOriginalName();
             $request->file('image')->move(public_path('images'), $img_name);
 
-            $product->image()->create([
-                'path' => $img_name,
-            ]);
+            $product->image()->create(['path' => $img_name]);
         }
 
-        if ($request->has('gallery')) {  // تأكد من استخدام اسم الحقل الصحيح هنا
+        // إضافة صور جديدة إلى المعرض (لا نحذف القديمة هنا)
+        if ($request->has('gallery')) {
             foreach ($request->gallery as $img) {
                 $img_name = rand() . time() . $img->getClientOriginalName();
                 $img->move(public_path('images'), $img_name);
@@ -153,12 +175,13 @@ class ProductController extends Controller
                 ]);
             }
         }
-        return redirect()
-        ->route('admin.products.index')
-        ->with('msg','Product added Successfully')
-        ->with('type','Success');
 
+        return redirect()
+            ->route('admin.products.index')
+            ->with('msg', 'Product updated successfully')
+            ->with('type', 'success');
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -188,18 +211,6 @@ class ProductController extends Controller
             return Image::destroy($id);
 
         }
-            // public function getProducts(Request $request){
-
-            //     $categoryId = $request->category_id;
-
-            //     // جلب المنتجات بناءً على القسم المحدد
-            //     if ($categoryId == 'all') {
-            //         $products = Product::latest()->limit(12)->get();
-            //     } else {
-            //         $products = Product::where('category_id', $categoryId)->latest()->limit(12)->get();
-            //     }
-
-            //     return view('front.partials.products', compact('products'));
-            // }
+     
 
 }

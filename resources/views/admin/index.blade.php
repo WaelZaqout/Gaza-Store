@@ -96,6 +96,11 @@
         }
 
     </style>
+    @if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+    @endif
 
     <body id="page-top">
         <div id="wrapper" class="d-flex">
@@ -212,6 +217,22 @@
                     </div>
                 </div>
             </div>
+
+            <form action="{{ route('admin.send.emails') }}" method="POST">
+                @csrf
+                <div class="card-header bg-primary text-white d-flex justify-content-between mt-5">
+                    <input type="number" name="count" id="SendEmail" class="form-control w-50" placeholder="أدخل عدد الإيميلات" required>
+                    <button class="btn btn-danger">إرسال إيميلات للمستخدمين</button>
+                </div>
+            </form>
+
+            <form action="{{ route('admin.send.emails.welcome') }}" method="POST">
+                @csrf
+                <div class="card-header bg-primary text-white d-flex justify-content-between mt-5">
+                    <input type="number" name="count" id="SendEmail" class="form-control w-50" placeholder="أدخل عدد للترحيب" required>
+                    <button class="btn btn-danger">إرسال إيميلات ترحيب </button>
+                </div>
+            </form>
 
 
             </div>

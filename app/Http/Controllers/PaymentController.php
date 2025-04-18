@@ -24,26 +24,24 @@ class PaymentController extends Controller
             return redirect()->route('login')->with('error', 'يجب عليك تسجيل الدخول لإتمام الطلب.');
         }
 
-        // جلب بيانات السلة للمستخدم الحالي
+        $payment_method = $request->input('payment_method');
+
+        // جلب السلة
         $carts = Cart::where('user_id', $user->id)->with('product')->get();
         if ($carts->isEmpty()) {
             return redirect()->back()->with('error', 'السلة فارغة!');
         }
 
-        // حساب إجمالي السعر
         $total_price = $carts->sum(fn($cart) => $cart->product->price * $cart->quantity);
 
-        try {
-            DB::beginTransaction(); // بدء معاملة
-
-            // إنشاء الطلب
+        if ($payment_method === 'cod') {
+            // الدفع عند التسليم
             $order = new order();
             $order->user_id = $user->id;
             $order->total_price = $total_price;
-            $order->status = $request->payment_method === 'cod' ? 'pending' : 'pending';
+            $order->status = 'pending';
             $order->save();
 
-            // إنشاء تفاصيل الطلب
             foreach ($carts as $cart) {
                 order_details::create([
                     'order_id'   => $order->id,
@@ -55,46 +53,49 @@ class PaymentController extends Controller
                 ]);
             }
 
-            // تفريغ السلة
             Cart::where('user_id', $user->id)->delete();
 
-            DB::commit(); // حفظ المعاملة
+            return view('front.checkout.success', compact('order'));
+        } else {
+            // الدفع الإلكتروني (Stripe)
+            try {
+                // أنشئ الطلب أولاً
+                $order = new order();
+                $order->user_id = $user->id;
+                $order->total_price = $total_price;
+                $order->status = 'pending';
+                $order->save();
 
-            // الدفع عند التسليم
-            if ($request->payment_method === 'cod') {
-                return redirect()->route('checkout.success')->with('success', 'تم إنشاء الطلب بنجاح وسيتم الدفع عند التسليم.');
+                Stripe::setApiKey(config('services.stripe.secret'));
+                $YOUR_DOMAIN = env('APP_URL');
+
+                $checkout_session = Session::create([
+                    'line_items' => [[
+                        'price_data' => [
+                            'currency'     => 'usd',
+                            'product_data' => ['name' => 'Order #' . $order->id],
+                            'unit_amount'  => $total_price * 100,
+                        ],
+                        'quantity' => 1,
+                    ]],
+                    'mode'         => 'payment',
+                    'metadata'     => ['order_id' => $order->id],
+                    'success_url'  => $YOUR_DOMAIN . '/checkout/success?session_id={CHECKOUT_SESSION_ID}',
+                    'cancel_url'   => $YOUR_DOMAIN . '/checkout/canceled?order_id=' . $order->id,
+                ]);
+
+                // احفظ session_id في الطلب إن أردت (يتطلب تعديل قاعدة البيانات)
+                // $order->session_id = $checkout_session->id;
+                // $order->save();
+
+                return redirect($checkout_session->url);
+
+            } catch (\Exception $e) {
+                return back()->with('error', 'حدث خطأ أثناء معالجة الدفع: ' . $e->getMessage());
             }
-
-            // الدفع الإلكتروني عبر Stripe
-            Stripe::setApiKey(config('services.stripe.secret'));
-            $YOUR_DOMAIN = env('APP_URL');
-
-            $checkout_session = Session::create([
-                'line_items' => [[
-                    'price_data' => [
-                        'currency'     => 'usd',
-                        'product_data' => ['name' => 'Order #' . $order->id],
-                        'unit_amount'  => $total_price * 100,
-                    ],
-                    'quantity' => 1,
-                ]],
-                'mode'         => 'payment',
-                'metadata'     => ['order_id' => $order->id],
-                'success_url'  => $YOUR_DOMAIN . '/checkout/success?session_id={CHECKOUT_SESSION_ID}',
-                'cancel_url'   => $YOUR_DOMAIN . '/checkout/canceled?order_id=' . $order->id,
-            ]);
-
-            // حفظ session_id داخل الطلب
-            $order->session_id = $checkout_session->id;
-            $order->save();
-
-            return redirect($checkout_session->url);
-
-        } catch (\Exception $e) {
-            DB::rollBack(); // إلغاء العملية في حالة الخطأ
-            return back()->with('error', 'حدث خطأ أثناء معالجة الدفع: ' . $e->getMessage());
         }
     }
+
 
     public function checkout(Request $request){
 
@@ -151,13 +152,35 @@ class PaymentController extends Controller
 
         try {
             $session = Session::retrieve($session_id);
-            $order = Order::where('session_id', $session->id)->first();
+            $order_id = $session->metadata['order_id'] ?? null;
+
+            if (!$order_id) {
+                return redirect()->route('checkout')->with('error', 'لم يتم العثور على الطلب.');
+            }
+
+            $order = Order::find($order_id);
 
             if (!$order) {
                 return redirect()->route('checkout')->with('error', 'لم يتم العثور على الطلب.');
             }
 
-            // تحديث حالة الطلب إلى "مدفوع"
+            // ✅ حفظ تفاصيل الطلب بعد الدفع
+            $carts = Cart::where('user_id', $order->user_id)->with('product')->get();
+            foreach ($carts as $cart) {
+                order_details::create([
+                    'order_id' => $order->id,
+                    'user_id' => $order->user_id,
+                    'product_id' => $cart->product_id,
+                    'quantity' => $cart->quantity,
+                    'price' => $cart->product->price,
+                    'total' => $cart->product->price * $cart->quantity,
+                ]);
+            }
+
+            // ✅ تفريغ السلة
+            Cart::where('user_id', $order->user_id)->delete();
+
+            // ✅ تحديث حالة الطلب
             $order->status = 'paid';
             $order->save();
 
@@ -167,6 +190,7 @@ class PaymentController extends Controller
             return redirect()->route('checkout')->with('error', 'حدث خطأ أثناء معالجة الدفع.');
         }
     }
+
 
     public function paymentCanceled(Request $request)
     {

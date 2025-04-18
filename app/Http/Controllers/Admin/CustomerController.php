@@ -105,6 +105,12 @@ class CustomerController extends Controller
         $customer->delete();
         return redirect()->route('admin.customers.index')->with('msg', 'Customer deleted successfully')->with('type', 'danger');
     }
+    public function printOrders($id)
+    {
+        $customer = User::with('orders')->findOrFail($id);
+
+        return view('admin.customers.print', compact('customer'));
+    }
 
 
 }

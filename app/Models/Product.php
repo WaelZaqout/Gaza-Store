@@ -42,7 +42,7 @@ class Product extends Model
 
     }
 
-    
+
     function getImgPathAttribute(){
 
         $url='https://via.placeholder.com/100x80';
@@ -53,6 +53,11 @@ class Product extends Model
         }
         return $url;
     }
+
+    public function variants()
+{
+    return $this->hasMany(product_variant::class);
+}
 
 }
 

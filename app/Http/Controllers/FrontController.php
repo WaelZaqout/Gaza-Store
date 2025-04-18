@@ -29,11 +29,12 @@ class FrontController extends Controller
     }
 
 
-     public function products()
+     public function products($id)
         {
             $categories = Category::all();
             $carts = Cart::all();
-            $products = Product::latest('id')->paginate(4);
+            // $products = Product::latest('id')->paginate(4);
+            $product = Product::with('variants')->findOrFail($id);
 
             return view('front.products', compact('categories', 'products','carts'));
         }
@@ -42,27 +43,36 @@ class FrontController extends Controller
         public function show($id)
         {
             try {
-                $product = Product::with('images')->findOrFail($id);
+                $product = Product::with(['images', 'variants'])->findOrFail($id);
 
-                // جمع مسارات الصور في مصفوفة
+                // جمع مسارات الصور
                 $images = $product->images->map(function ($image) {
                     return asset('images/' . $image->path);
                 });
 
-                return response()->json([
+                // جمع الخيارات (الحجم واللون والكمية)
+                $variants = $product->variants->map(function ($variant) {
+                    return [
+                        'size' => $variant->size,
+                        'color' => $variant->color,
+                        'quantity' => $variant->quantity,
+                    ];
+                });
 
+                return response()->json([
                     'name' => $product->trans_name,
                     'price' => $product->price,
                     'description' => $product->trans_description,
-                    'images' => $images // إرسال الصور مع الاستجابة
+                    'images' => $images,
+                    'variants' => $variants,
                 ]);
+
             } catch (\Exception $e) {
                 Log::error($e->getMessage());
                 return response()->json(['error' => 'Product not found'], 404);
             }
-
-
         }
+
 
         public function filterProducts($id)
         {
@@ -76,25 +86,39 @@ class FrontController extends Controller
         }
 
 
-        public function getProduct( $id)
+        public function getProduct($id)
         {
-            $product = Product::with('image', 'gallery')->findOrFail($id);
+            $product = Product::with(['image', 'gallery', 'variants'])->findOrFail($id);
 
-            // تحقق مما إذا كان الطلب يتوقع استجابة JSON
-            if (request()->expectsJson()) {
-                return response()->json([
-                    'id' => $product->id,
-                    'name' => $product->trans_name,
-                    'price' => $product->price,
-                    'description' => $product->trans_description,
-                    'image' => $product->image ? $product->image->path : null,
-                    'gallery' => $product->gallery ? $product->gallery->toArray() : []
-                ]);
-            }
+            // تصفية المتغيرات المتوفرة فقط (الكمية > 0)
+            $variants = $product->variants->where('quantity', '>', 0);
 
-            // إذا لم يكن الطلب يتوقع استجابة JSON، قم بعرض الواجهة
-            return view('front.partials.products', compact('product'));
+            // استخراج الأحجام والألوان الفريدة
+            $sizes = $variants->pluck('size')->unique()->values();
+            $colors = $variants->pluck('color')->unique()->values();
+
+            // إعادة المتغيرات كاملة (للربط بين الحجم واللون في JS)
+            $variantList = $variants->map(function ($variant) {
+                return [
+                    'size' => $variant->size,
+                    'color' => $variant->color,
+                    'quantity' => $variant->quantity,
+                ];
+            });
+
+            return response()->json([
+                'id' => $product->id,
+                'name' => $product->trans_name,
+                'price' => $product->price,
+                'description' => $product->trans_description,
+                'image' => $product->image ? $product->image->path : null,
+                'gallery' => $product->gallery ? $product->gallery->toArray() : [],
+                'sizes' => $sizes,
+                'colors' => $colors,
+                'variants' => $variantList, // ⬅️ هذا ضروري للتفاعل المتبادل في JavaScript
+            ]);
         }
+
 
 
 
